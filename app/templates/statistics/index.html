@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-3">
+            <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action{% if tab == 'leader-board' %} active{% endif %}" id="leader-board-list" data-toggle="list"
+                   href="#leader-board" role="tab" aria-controls="leader-board">Ranking personal</a>
+                <a class="list-group-item list-group-item-action{% if tab == 'team-leader-board' %} active{% endif %}" id="team-leader-board-list" data-toggle="list"
+                   href="#team-leader-board" role="tab" aria-controls="team-leader-board">Ranking por parejas</a>
+                <a class="list-group-item list-group-item-action{% if tab == 'versus-leader-board' %} active{% endif %}" id="versus-leader-board-list" data-toggle="list"
+                   href="#versus-leader-board" role="tab" aria-controls="versus-leader-board">Enfrentamientos personal</a>
+                <a class="list-group-item list-group-item-action{% if tab == 'versus-team-leader-board' %} active{% endif %}" id="versus-team-leader-board-list" data-toggle="list"
+                   href="#versus-team-leader-board" role="tab" aria-controls="versus-team-leader-board">Enfrentamientos por parejas</a>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade{% if tab == 'leader-board' %} show active{% endif %}" id="leader-board" role="tabpanel"
+                     aria-labelledby="leader-board-list">
+                    {% with data = leader_board %}
+                        {% include 'statistics/_leader_board.html' %}
+                    {% endwith %}
+                </div>
+                <div class="tab-pane fade{% if tab == 'team-leader-board' %} show active{% endif %}" id="team-leader-board" role="tabpanel"
+                     aria-labelledby="team-leader-board-list">
+                    {% with data = team_leader_board %}
+                        {% include 'statistics/_team_leader_board.html' %}
+                    {% endwith %}
+                </div>
+                <div class="tab-pane fade{% if tab == 'versus-leader-board' %} show active{% endif %}" id="versus-leader-board" role="tabpanel"
+                     aria-labelledby="versus-leader-board-list">
+                    {% with data = versus_leader_board %}
+                        {% include 'statistics/_versus_leader_board.html' %}
+                    {% endwith %}
+                </div>
+                <div class="tab-pane fade{% if tab == 'versus-team-leader-board' %} show active{% endif %}" id="versus-team-leader-board" role="tabpanel"
+                     aria-labelledby="versus-team-leader-board-list">
+                    {% with data = versus_team_leader_board %}
+                        {% include 'statistics/_versus_team_leader_board.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

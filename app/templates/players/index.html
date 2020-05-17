@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card">
+        <h5 class="card-header text-center">Lista de jugadores</h5>
+        <div class="card-body">
+        <div class="text-center">
+            <a href="{{ url_for('players.new') }}" class="btn btn-primary mb-3">Crear jugador</a>
+        </div>
+            <table class="table">
+                <thead>
+                <tr class="table-info">
+                    <th scope="col">Nombre</th>
+                    <th scope="col" class="text-right">G</th>
+                    <th scope="col" class="text-right">P</th>
+                    <th scope="col" class="text-right">+/-</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for player in players %}
+                    <tr>
+                        <th scope="row">{{ player.name }}</th>
+                        <td class="text-right">{{ player.manual_wins }}</td>
+                        <td class="text-right">{{ player.manual_loses }}</td>
+                        <th scope="row" class="text-right">{{ player.manual_wins - player.manual_loses }}</th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    <div class="card-footer">
+        <span class="text-muted">Los puntos de esta tabla son los que <b>NO</b> pertenecen a partidos anotados en el sistema</span>
+    </div>
+    </div>
+{% endblock %}

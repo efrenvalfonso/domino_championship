@@ -1,0 +1,59 @@
+<table class="table" id="current-game">
+    <thead>
+    <tr class="row m-0 table-info">
+        <th scope="col" class="col-6 text-center">
+            <h5 class="m-0">
+                {{ current_game.team1_player1.name }}
+                <hr class="my-1"/>
+                {{ current_game.team1_player2.name }}
+            </h5>
+        </th>
+        <th scope="col" class="col-6 text-center">
+            <h5 class="m-0">
+                {{ current_game.team2_player1.name }}
+                <hr class="my-1"/>
+                {{ current_game.team2_player2.name }}
+            </h5>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if current_game_status > 1 %}
+        <tr class="table-{% if current_game_status == 2 %}warning{% else %}danger{% endif %}">
+            <th scope="row"
+                class="text-center text-{% if current_game_status == 2 %}warning{% else %}danger{% endif %}">
+                &laquo; POSIBLE {% if current_game_status == 2 %}POLLONA{% else %}RECULA{% endif %} &raquo;
+            </th>
+        </tr>
+    {% endif %}
+    <tr class="row m-0 table-default">
+        <td class="col-6">
+            {% with form = team1_game_data_form %}
+                {% include 'game_datas/_form.html' %}
+            {% endwith %}
+        </td>
+        <td class="col-6">
+            {% with form = team2_game_data_form %}
+                {% include 'game_datas/_form.html' %}
+            {% endwith %}
+        </td>
+    </tr>
+    {% for data in current_game.game_datas %}
+        <tr class="row m-0 text-center table-default">
+            {% if data.is_for_team1 %}
+                <td class="col-6 font-weight-bold">{{ data.score }}</td>
+                <td class="col-6 text-muted">0</td>
+            {% else %}
+                <td class="col-6 text-muted">0</td>
+                <td class="col-6 font-weight-bold">{{ data.score }}</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    <tr class="row m-0 table-secondary">
+        <th scope="col" class="col-6 text-center"><h5
+                class="m-0 font-weight-bolder">{{ current_game.team1_score }}</h5></th>
+        <th scope="col" class="col-6 text-center"><h5
+                class="m-0 font-weight-bolder">{{ current_game.team2_score }}</h5></th>
+    </tr>
+    </tbody>
+</table>

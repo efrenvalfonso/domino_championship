@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="text-center">Comenzar juego</h2>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-10 col-sm-8 col-md-6 col-lg-4 mx-auto">
+            {% include 'games/_form.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+    <script type="text/javascript">
+        $(document).ready(() => {
+            const team1player1Select = $('#{{form.team1_player1_id.id}}')
+            const team1player2Select = $('#{{form.team1_player2_id.id}}')
+            const team2player1Select = $('#{{form.team2_player1_id.id}}')
+            const team2player2Select = $('#{{form.team2_player2_id.id}}')
+            const preSelectedPlayers = []
+
+            team1player1Select.select2({
+                ajax: {
+                    url: '/players/game-player-for{% if form.team1_player2_id.default %}/{{ form.team1_player2_id.default }}{% endif %}',
+                    dataType: 'json',
+                }
+            })
+
+            {% if form.team1_player1_id.default %}
+                team1player1Select.select2('val', '{{ form.team1_player1_id.default }}')
+                preSelectedPlayers.push('{{ form.team1_player1_id.default }}')
+            {% endif %}
+
+            team1player1Select.on('select2:select', (e) => {
+                team1player2Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [e.params.data.id, team2player1Select.val(), team2player2Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team2player1Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [e.params.data.id, team1player2Select.val(), team2player2Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team2player2Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [e.params.data.id, team1player2Select.val(), team2player1Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+            })
+
+            team1player2Select.select2({
+                ajax: {
+                    url: '/players/game-player-for{% if form.team1_player1_id.default %}/{{ form.team1_player1_id.default }}{% endif %}',
+                    dataType: 'json',
+                }
+            })
+
+            {% if form.team1_player2_id.default %}
+                team1player2Select.select2('val', '{{ form.team1_player2_id.default }}')
+                preSelectedPlayers.push('{{ form.team1_player2_id.default }}')
+            {% endif %}
+
+            team1player2Select.on('select2:select', (e) => {
+                team1player1Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [e.params.data.id, team2player1Select.val(), team2player2Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team2player1Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player1Select.val(), e.params.data.id, team2player2Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team2player2Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player1Select.val(), e.params.data.id, team2player1Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+            })
+
+            team2player1Select.select2({
+                ajax: {
+                    url: '/players/game-player-for' + (preSelectedPlayers.length > 0 ? ('/' + preSelectedPlayers.join('+')) : ''),
+                    dataType: 'json',
+                }
+            }).on('select2:select', (e) => {
+                team1player1Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player2Select.val(), e.params.data.id, team2player2Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team1player2Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player1Select.val(), e.params.data.id, team2player2Select.val()].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team2player2Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player1Select.val(), team1player2Select.val(), e.params.data.id].join('+'),
+                        dataType: 'json',
+                    }
+                })
+            })
+
+            team2player2Select.select2({
+                ajax: {
+                    url: '/players/game-player-for' + (preSelectedPlayers.length > 0 ? ('/' + preSelectedPlayers.join('+')) : ''),
+                    dataType: 'json',
+                }
+            }).on('select2:select', (e) => {
+                team1player1Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player2Select.val(), team2player1Select.val(), e.params.data.id].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team1player2Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player1Select.val(), team2player1Select.val(), e.params.data.id].join('+'),
+                        dataType: 'json',
+                    }
+                })
+                team2player1Select.select2({
+                    ajax: {
+                        url: '/players/game-player-for/' + [team1player1Select.val(), team1player2Select.val(), e.params.data.id].join('+'),
+                        dataType: 'json',
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}

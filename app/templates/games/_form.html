@@ -1,0 +1,31 @@
+{% import 'bootstrap/wtf.html' as wtf %}
+
+<form action="{{ url_for('games.new') }}" method="post">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="only") }}
+    <div class="form-group">
+        {{ wtf.form_field(form.team1_player1_id, class='select2', placeholder='Seleccione jugador') }}
+        {% for error in form.team1_player1_id.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ wtf.form_field(form.team1_player2_id, class='select2', placeholder='Seleccione jugador') }}
+        {% for error in form.team1_player2_id.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ wtf.form_field(form.team2_player1_id, class='select2', placeholder='Seleccione jugador') }}
+        {% for error in form.team2_player1_id.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ wtf.form_field(form.team2_player2_id, class='select2', placeholder='Seleccione jugador') }}
+        {% for error in form.team2_player2_id.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    {{ wtf.form_field(form.submit, button_map={'submit': 'primary'}) }}
+</form>

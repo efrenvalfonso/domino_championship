@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                {% if current_game %}
+                    <h5 class="card-header text-center">Juego actual</h5>
+                {% else %}
+                    <h5 class="card-header text-center">No se esta jugando</h5>
+                {% endif %}
+                <div class="card-body">
+                    {% if current_game %}
+                        {% include 'dashboard/_current_game_board.html' %}
+                    {% else %}
+                        <div class="row">
+                            <div class="col-12 offset-sm-1 col-sm-5 offset-md-2 col-md-4 offset-lg-3 col-lg-3 offset-xl-4 col-xl-2 text-center">
+                                <a href="{{ url_for('games.new') }}" class="btn btn-primary">Juego nuevo</a>
+                            </div>
+                            <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-2 text-center">
+                                <a href="{{ url_for('games.new', continue=1) }}" class="btn btn-success">Continuar
+                                    jugando</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-7 col-lg-6 col-xl-4">
+            <div class="card mb-4">
+                <h5 class="card-header text-center mb-0">Ranking</h5>
+                <div class="card-body m-n3 m-sm-0">
+                    {% with data = leader_board %}
+                        {% include 'statistics/_leader_board.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-5 col-lg-6 col-xl-8">
+            {% if last_games.count() > 0 %}
+                <div class="card">
+                    <h5 class="card-header text-center d-block d-sm-none d-md-block mb-0">
+                        Partidos de las ultimas 24h
+                    </h5>
+                    <h5 class="card-header text-center d-none d-sm-block d-md-none mb-0">Ultimas 24h</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for game in last_games %}
+                                <div class="col-12 col-lg-6 col-xl-4">
+                                    {% include 'games/_boxscore.html' %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row mt-5 mb-3">
+                    <div class="col-12">
+                        <h2 class="text-center">No se ha jugado en las ultimas 24h</h2>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="annotation-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirme anotacion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Le va a anotar <h5 class="score d-inline font-weight-bolder"></h5> puntos a <h5
+                        class="team d-inline font-weight-bolder"></h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="annotation-modal-submit">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="invalid-annotation-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Anotacion invalida</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    La anotacion que esta haciendo es invalida
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+    <script type="text/javascript">
+        const raiseModal = (target) => {
+            const button = $(target)
+            const form = button.parents('.game-data-form')
+            const score = parseInt(form.find('#score').val())
+
+            if (score) {
+                const modal = $('#annotation-modal')
+                const annotationModalSubmit = $('#annotation-modal-submit')
+
+                modal.find('.score').text(score)
+                modal.find('.team').text(button.data('team-members'))
+                modal.modal('show')
+
+                annotationModalSubmit.off('click')
+                annotationModalSubmit.on('click', (e) => {
+                    form.submit()
+                })
+            } else {
+                $('#invalid-annotation-modal').modal('show')
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,37 @@
+<table class="table table-hover">
+    <thead>
+    <tr class="table-info row m-0">
+        <th scope="col" class="text-center col-2 pt-2 pr-2 pb-2">#</th>
+        <th scope="col" class="col-4 p-2">
+            Jugador
+        </th>
+        <th scope="col" class="text-right col-2 p-2">
+            <a href="{{ url_for(request.endpoint, tab='leader-board', leader_board_order_by='wins_score DESC') }}">G</a>
+        </th>
+        <th scope="col" class="text-right col-2 p-2">
+            <a href="{{ url_for(request.endpoint, tab='leader-board', leader_board_order_by='loses_score DESC') }}">P</a>
+        </th>
+        <th scope="col" class="text-right col-2 pt-2 pl-2 pb-2">
+            <a href="{{ url_for(request.endpoint, tab='leader-board', leader_board_order_by='balance DESC') }}">+/-</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for record in data %}
+        <tr class="row m-0 table-{% if record[4] < -5 %}danger{% elif record[4] < 6 %}warning{% else %}default{% endif %}">
+            <th scope="row" class="text-center col-2 pt-2 pr-2 pb-2">
+                {% if loop.index < 4 %}
+                    <img src="{{ url_for('static', filename='img/medal-' + (loop.index | string) + '.svg') }}"
+                         alt="{{ loop.index }}" style="height: 1.37em"/>
+                {% else %}
+                    {{ loop.index }}
+                {% endif %}
+            </th>
+            <td class="col-4 p-2">{{ record[1] }}</td>
+            <td class="text-right col-2 p-2">{{ record[2] }}</td>
+            <td class="text-right col-2 p-2">{{ record[3] }}</td>
+            <th scope="row" class="text-right col-2 pt-2 pl-2 pb-2">{{ record[4] }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
