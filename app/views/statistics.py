@@ -57,7 +57,7 @@ def team_leader_board():
         filter(Game.finished_at.isnot(None), players1.id != players2.id). \
         group_by(players1.id, players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
-        order_by(db.text(request.args.get('team_leader_board_order_by', 'balance DESC, wins_score')))
+        order_by(db.text(request.args.get('team_leader_board_order_by', 'balance DESC, wins_score DESC')))
 
 
 def versus_team_leader_board():
@@ -110,4 +110,4 @@ def versus_team_leader_board():
         filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id)). \
         group_by(players1.id, players2.id, other_players1.id, other_players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
-        order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC, wins_score')))
+        order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC, wins_score DESC')))
