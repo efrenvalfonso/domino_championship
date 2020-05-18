@@ -57,7 +57,7 @@ def leader_board():
              isouter=True). \
         filter(Game.finished_at.isnot(None)). \
         group_by(Player.id). \
-        order_by(db.text(request.args.get('leader_board_order_by', 'balance DESC')))
+        order_by(db.text(request.args.get('leader_board_order_by', 'balance DESC, wins_score')))
 
 
 def versus_leader_board():
@@ -108,4 +108,4 @@ def versus_leader_board():
         filter(Game.finished_at.isnot(None)). \
         group_by(players.id, other_players.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
-        order_by(db.text(request.args.get('versus_leader_board_order_by', 'balance DESC')))
+        order_by(db.text(request.args.get('versus_leader_board_order_by', 'balance DESC, wins_score')))

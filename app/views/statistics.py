@@ -4,7 +4,7 @@ from sqlalchemy.orm import aliased
 
 from app import db
 from app.models import Player, Game
-from app.util import leader_board
+from app.util import leader_board, versus_leader_board
 
 bp = Blueprint('statistics', __name__, url_prefix='/statistics')
 
@@ -57,7 +57,7 @@ def team_leader_board():
         filter(Game.finished_at.isnot(None), players1.id != players2.id). \
         group_by(players1.id, players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
-        order_by(db.text(request.args.get('team_leader_board_order_by', 'balance DESC')))
+        order_by(db.text(request.args.get('team_leader_board_order_by', 'balance DESC, wins_score')))
 
 
 def versus_team_leader_board():
@@ -110,4 +110,4 @@ def versus_team_leader_board():
         filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id)). \
         group_by(players1.id, players2.id, other_players1.id, other_players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
-        order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC')))
+        order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC, wins_score')))

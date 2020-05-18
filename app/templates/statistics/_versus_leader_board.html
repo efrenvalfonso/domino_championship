@@ -16,7 +16,7 @@
                 <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='loses_score DESC') }}">P</a>
             </th>
             <th scope="col" class="text-right col-2 pt-2 pl-2 pb-2">
-                <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='balance DESC') }}">+/-</a>
+                <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='balance DESC, wins_score') }}">+/-</a>
             </th>
         {% endif %}
     </tr>
