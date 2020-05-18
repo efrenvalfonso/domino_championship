@@ -18,20 +18,20 @@
     </tr>
     </thead>
     <tbody>
-    {% if current_game_status > 1 %}
-        <tr class="table-{% if current_game_status == 2 %}warning{% else %}danger{% endif %}">
-            <th scope="row"
-                class="py-0 text-center text-{% if current_game_status == 2 %}warning{% else %}danger{% endif %}">
-                &laquo; POSIBLE {% if current_game_status == 2 %}POLLONA{% else %}RECULA{% endif %} &raquo;
-            </th>
-        </tr>
-    {% endif %}
     <tr class="row m-0 thead-dark">
         <th scope="col" colspan="2" class="col-6 text-center"><h3
                 class="m-0 font-weight-bolder">{{ current_game.team1_score }}</h3></th>
         <th scope="col" class="col-6 text-center"><h3
                 class="m-0 font-weight-bolder">{{ current_game.team2_score }}</h3></th>
     </tr>
+    {% if current_game_status > 1 %}
+        <tr class="table-light">
+            <th scope="row"
+                class="py-0 text-center text-{% if current_game_status == 2 %}warning{% else %}danger{% endif %}">
+                &laquo; POSIBLE {% if current_game_status == 2 %}POLLONA{% else %}RECULA{% endif %} &raquo;
+            </th>
+        </tr>
+    {% endif %}
     <tr class="row m-0 table-default">
         <td class="col-6">
             {% with form = team1_game_data_form %}

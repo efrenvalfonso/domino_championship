@@ -60,7 +60,7 @@
     </div>
 </header>
 <main>
-    <div class="container mt-4">
+    <div class="container mt-4 {% if tv %}mx-0 px-4{% endif %}" style="max-width: 100%">
         {% if not tv %}
             {% with messages = get_flashed_messages(with_categories=True) %}
                 {% if messages %}

@@ -239,7 +239,23 @@
                 }, 1000);
             }
 
-            countdown(10)
+            countdown(600)
+
+            $(document).ready(() => {
+                const flash = (fadeIn = false) => {
+                    if (fadeIn)
+                        $('.flash').fadeIn(500, () => {
+                            flash(false)
+                        })
+                    else
+                        $('.flash').fadeOut(500, () => {
+                            flash(true)
+                        })
+                }
+
+                flash()
+            })
+
         {% else %}
             const raiseAnnotationModal = (target) => {
                 const button = $(target)
