@@ -1,0 +1,28 @@
+{% import 'bootstrap/wtf.html' as wtf %}
+
+<form action="{{ url_for('players.annotate') }}" method="post">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="only") }}
+    <div class="form-group">
+        {{ form.id.label }}
+        {{ form.id(class='select2', placeholder='Seleccione jugador') }}
+        {% for error in form.id.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.manual_wins.label }}
+        {{ form.manual_wins() }}
+        {% for error in form.manual_wins.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.manual_loses.label }}
+        {{ form.manual_loses() }}
+        {% for error in form.manual_loses.errors %}
+            <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+    {{ wtf.form_field(form.submit, button_map={'submit': 'primary'}) }}
+</form>

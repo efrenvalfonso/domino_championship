@@ -5,13 +5,13 @@ from sqlalchemy import and_
 
 from app.forms import GameDataForm
 from app.models import Game
-from app.util import leader_board
+from app.util import leader_board, versus_leader_board
 
 bp = Blueprint('dashboard', __name__)
 
 
 @bp.route('/')
-def index():
+def index(tv=False):
     current_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
     last_games = Game.query. \
         filter(
@@ -21,9 +21,12 @@ def index():
     if not current_game:
         return render_template('dashboard/index.html',
                                last_games=last_games,
-                               leader_board=leader_board())
+                               leader_board=leader_board(),
+                               tv=tv,
+                               versus_leader_board=versus_leader_board() if tv else None)
 
     current_game_status = 1
+
     if not (current_game.team1_score == 0 and current_game.team2_score == 0):
         if current_game.team1_score == 0 or current_game.team2_score == 0:  # Pollona
             current_game_status = 2
@@ -64,4 +67,11 @@ def index():
                            team1_game_data_form=team1_game_data_form,
                            team2_game_data_form=team2_game_data_form,
                            last_games=last_games,
-                           leader_board=leader_board())
+                           leader_board=leader_board(),
+                           tv=tv,
+                           versus_leader_board=versus_leader_board() if tv else None)
+
+
+@bp.route('/tv')
+def tv():
+    return index(True)

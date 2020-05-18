@@ -46,7 +46,7 @@ class Game(db.Model):
     team1_player2 = db.relationship('Player', foreign_keys=[team1_player2_id])
     team2_player1 = db.relationship('Player', foreign_keys=[team2_player1_id])
     team2_player2 = db.relationship('Player', foreign_keys=[team2_player2_id])
-    game_datas = db.relationship("GameData", backref='game', order_by='GameData.timestamp')
+    game_datas = db.relationship("GameData", backref='game', order_by='GameData.timestamp', cascade="all,delete")
 
     def __repr__(self):
         return '<Game %r>' % '{}/{} vs. {}/{}'.format(

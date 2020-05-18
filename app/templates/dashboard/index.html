@@ -1,129 +1,296 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-12">
-            <div class="card mb-4">
-                {% if current_game %}
-                    <h5 class="card-header text-center">Juego actual</h5>
-                {% else %}
-                    <h5 class="card-header text-center">No se esta jugando</h5>
-                {% endif %}
-                <div class="card-body">
-                    {% if current_game %}
-                        {% include 'dashboard/_current_game_board.html' %}
-                    {% else %}
-                        <div class="row">
-                            <div class="col-12 offset-sm-1 col-sm-5 offset-md-2 col-md-4 offset-lg-3 col-lg-3 offset-xl-4 col-xl-2 text-center">
-                                <a href="{{ url_for('games.new') }}" class="btn btn-primary">Juego nuevo</a>
-                            </div>
-                            <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-2 text-center">
-                                <a href="{{ url_for('games.new', continue=1) }}" class="btn btn-success">Continuar
-                                    jugando</a>
-                            </div>
-                        </div>
+    {% if tv %}
+        {% include 'dashboard/_tv.html' %}
+    {% else %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="card mb-4">
+                    {% if not current_game %}
+                        <h5 class="card-header text-center">No se esta jugando</h5>
                     {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-7 col-lg-6 col-xl-4">
-            <div class="card mb-4">
-                <h5 class="card-header text-center mb-0">Ranking</h5>
-                <div class="card-body m-n3 m-sm-0">
-                    {% with data = leader_board %}
-                        {% include 'statistics/_leader_board.html' %}
-                    {% endwith %}
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-5 col-lg-6 col-xl-8">
-            {% if last_games.count() > 0 %}
-                <div class="card">
-                    <h5 class="card-header text-center d-block d-sm-none d-md-block mb-0">
-                        Partidos de las ultimas 24h
-                    </h5>
-                    <h5 class="card-header text-center d-none d-sm-block d-md-none mb-0">Ultimas 24h</h5>
                     <div class="card-body">
-                        <div class="row">
-                            {% for game in last_games %}
-                                <div class="col-12 col-lg-6 col-xl-4">
-                                    {% include 'games/_boxscore.html' %}
-                                </div>
-                            {% endfor %}
+                        {% if current_game %}
+                            {% include 'dashboard/_current_game_board.html' %}
+                        {% else %}
+                            <div class="row">
+                                {% if last_games.count() == 0 %}
+                                    <div class="col-12 offset-sm-3 col-sm-6 text-center">
+                                        <a href="{{ url_for('games.new') }}" class="btn btn-primary mb-2 mb-md-0">
+                                            Comenzar
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="col-12 offset-sm-1 col-sm-5 offset-md-0 col-md-6 text-center text-sm-right">
+                                        <a href="{{ url_for('games.new') }}" class="btn btn-primary mb-2">
+                                            Comenzar
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-sm-5 col-lg-4 offset-md-0 col-md-6 text-center text-sm-left">
+                                        <a href="{{ url_for('games.new', continue=1) }}"
+                                           class="btn btn-success mb-2">
+                                            Siguiente
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-sm-12 text-center">
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                data-target="#reopen-last-game">
+                                            Reabrir ultimo partido
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body m-n3 m-sm-0">
+                        {% with data = leader_board %}
+                            {% include 'statistics/_leader_board.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% if last_games.count() > 0 %}
+                    <div class="card">
+                        <h5 class="card-header text-center d-block d-sm-none d-md-block mb-0">
+                            Partidos de las ultimas 24h
+                        </h5>
+                        <h5 class="card-header text-center d-none d-sm-block d-md-none mb-0">Ultimas 24h</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for game in last_games %}
+                                    <div class="col-12 col-lg-6 col-xl-4">
+                                        {% include 'games/_boxscore.html' %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row mt-5 mb-3">
+                        <div class="col-12">
+                            <h2 class="text-center">No se ha jugado en las ultimas 24h</h2>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if current_game %}
+            <div class="modal fade" tabindex="-1" role="dialog" id="annotation-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirme anotacion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Le va a anotar <h5 class="score d-inline font-weight-bolder text-danger"></h5> puntos a
+                            <h5 class="team d-inline font-weight-bolder text-danger"></h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" id="annotation-modal-submit">OK</button>
                         </div>
                     </div>
                 </div>
-            {% else %}
-                <div class="row mt-5 mb-3">
-                    <div class="col-12">
-                        <h2 class="text-center">No se ha jugado en las ultimas 24h</h2>
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" id="invalid-annotation-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Anotacion invalida</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            La anotacion que esta haciendo es invalida
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
                     </div>
                 </div>
-            {% endif %}
-        </div>
-    </div>
-    <div class="modal fade" tabindex="-1" role="dialog" id="annotation-modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirme anotacion</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Le va a anotar <h5 class="score d-inline font-weight-bolder"></h5> puntos a <h5
-                        class="team d-inline font-weight-bolder"></h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="annotation-modal-submit">OK</button>
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" id="remove-data-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cuidado</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Esta seguro que quiere eliminar la data?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="remove-data-submit">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="modal fade" tabindex="-1" role="dialog" id="invalid-annotation-modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Anotacion invalida</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    La anotacion que esta haciendo es invalida
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <div class="modal fade" tabindex="-1" role="dialog" id="victory-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cuidado</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Va a declarar ganador a <h5 class="winner d-inline font-weight-bolder text-danger"></h5>.
+                            Quiere
+                            seguir?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-success" data-dismiss="modal" id="victory-submit">
+                                Terminar
+                                juego
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="modal fade" tabindex="-1" role="dialog" id="confirm-abort">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cuidado</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Esta seguro que desea abandorar el juego? Se eliminara toda la informacion.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <form action="{{ url_for('games.delete', game_id=current_game.id) }}" method="post">
+                                <button type="submit" class="btn btn-danger">Abandonar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="modal fade" tabindex="-1" role="dialog" id="reopen-last-game">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cuidado</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Al reabrir el ultimo partido esta borrando la ultima data del mismo. Quiere continuar?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <form action="{{ url_for('games.reopen_last_game') }}" method="post">
+                                <button type="submit" class="btn btn-danger">Reabrir</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block custom_js %}
     <script type="text/javascript">
-        const raiseModal = (target) => {
-            const button = $(target)
-            const form = button.parents('.game-data-form')
-            const score = parseInt(form.find('#score').val())
+        {% if tv %}
+            const countdown = (remaining) => {
+                if (remaining <= 0)
+                    location.reload(true);
 
-            if (score) {
-                const modal = $('#annotation-modal')
-                const annotationModalSubmit = $('#annotation-modal-submit')
+                document.getElementById('countdown').innerHTML = remaining;
 
-                modal.find('.score').text(score)
-                modal.find('.team').text(button.data('team-members'))
+                switch (remaining % 3) {
+                    case 1:
+                        document.getElementById('dots').innerHTML = '...';
+                        break
+                    case 2:
+                        document.getElementById('dots').innerHTML = '..';
+                        break
+                    default:
+                        document.getElementById('dots').innerHTML = '.';
+                        break
+                }
+
+                setTimeout(() => {
+                    countdown(remaining - 1);
+                }, 1000);
+            }
+
+            countdown(10)
+        {% else %}
+            const raiseAnnotationModal = (target) => {
+                const button = $(target)
+                const form = button.parents('.game-data-form')
+                const score = parseInt(form.find('#score').val())
+
+                if (score) {
+                    const modal = $('#annotation-modal')
+                    const annotationModalSubmit = $('#annotation-modal-submit')
+
+                    modal.find('.score').text(score)
+                    modal.find('.team').text(button.data('team-members'))
+                    modal.modal('show')
+
+                    annotationModalSubmit.off('click')
+                    annotationModalSubmit.on('click', (e) => {
+                        form.submit()
+                    })
+                } else {
+                    $('#invalid-annotation-modal').modal('show')
+                }
+            }
+
+            const raiseRemoveDataModal = (target) => {
+                const form = $(target).parents('form')
+                const modal = $('#remove-data-modal')
+                const removeDataSubmit = $('#remove-data-submit')
+
                 modal.modal('show')
 
-                annotationModalSubmit.off('click')
-                annotationModalSubmit.on('click', (e) => {
+                removeDataSubmit.off('click')
+                removeDataSubmit.on('click', (e) => {
                     form.submit()
                 })
-            } else {
-                $('#invalid-annotation-modal').modal('show')
             }
-        }
+
+            const raiseVictoryModal = (target) => {
+                const button = $(target)
+                const form = button.parents('form')
+                const modal = $('#victory-modal')
+                const victorySubmit = $('#victory-submit')
+
+                modal.find('.winner').text(button.data('team-members'))
+                modal.modal('show')
+
+                victorySubmit.off('click')
+                victorySubmit.on('click', (e) => {
+                    console.log(form)
+                    form.submit()
+                })
+            }
+        {% endif %}
     </script>
 {% endblock %}

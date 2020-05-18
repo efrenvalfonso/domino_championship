@@ -64,3 +64,21 @@ def new():
         flash(form.score.errors[-1], 'error')
 
     return redirect(url_for('index'))
+
+
+@bp.route('delete/<int:game_data_id>', methods=['POST'])
+def delete(game_data_id):
+    game_data = GameData.query.filter(GameData.id == game_data_id).one_or_none()
+
+    if game_data:
+        if game_data.is_for_team1:
+            game_data.game.team1_score -= game_data.score
+        else:
+            game_data.game.team2_score -= game_data.score
+
+        db.session.delete(game_data)
+        db.session.commit()
+    else:
+        flash('Ha ocurrido un error', 'error')
+
+    return redirect(url_for('index'))

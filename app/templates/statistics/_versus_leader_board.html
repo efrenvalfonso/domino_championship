@@ -2,17 +2,23 @@
     <thead>
     <tr class="table-info row m-0">
         <th scope="col" class="text-center col-1 pt-2 pr-2 pb-2">#</th>
-        <th scope="col" class="col-4 p-2">Jugador</th>
-        <th scope="col" class="col-4 p-2">Rival</th>
-        <th scope="col" class="text-right col-1 p-2">
-            <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='wins_score DESC') }}">G</a>
-        </th>
-        <th scope="col" class="text-right col-1 p-2">
-            <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='loses_score DESC') }}">P</a>
-        </th>
-        <th scope="col" class="text-right col-1 pt-2 pl-2 pb-2">
-            <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='balance DESC') }}">+/-</a>
-        </th>
+        <th scope="col" class="col p-2">Jugador</th>
+        <th scope="col" class="col p-2">Rival</th>
+        {% if tv %}
+            <th scope="col" class="text-right col-2 p-2">G</th>
+            <th scope="col" class="text-right col-2 p-2">P</th>
+            <th scope="col" class="text-right col-2 pt-2 pl-2 pb-2">+/-</th>
+        {% else %}
+            <th scope="col" class="text-right col-2 p-2">
+                <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='wins_score DESC') }}">G</a>
+            </th>
+            <th scope="col" class="text-right col-2 p-2">
+                <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='loses_score DESC') }}">P</a>
+            </th>
+            <th scope="col" class="text-right col-2 pt-2 pl-2 pb-2">
+                <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='balance DESC') }}">+/-</a>
+            </th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -27,11 +33,11 @@
                     {{ loop.index }}
                 {% endif %}
             </th>
-            <td class="col-4 p-2">{{ record[1] }}</td>
-            <td class="col-4 p-2">{{ record[3] }}</td>
-            <td class="text-right col-1 p-2">{{ record[4] }}</td>
-            <td class="text-right col-1 p-2">{{ record[5] }}</td>
-            <th scope="row" class="text-right col-1 pt-2 pl-2 pb-2">{{ record[6] }}</th>
+            <td class="col p-2">{{ record[1] }}</td>
+            <td class="col p-2">{{ record[3] }}</td>
+            <td class="text-right col-2 p-2">{{ record[4] }}</td>
+            <td class="text-right col-2 p-2">{{ record[5] }}</td>
+            <th scope="row" class="text-right col-2 pt-2 pl-2 pb-2">{{ record[6] }}</th>
         </tr>
     {% endfor %}
     </tbody>

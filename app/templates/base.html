@@ -8,60 +8,76 @@
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
 </head>
 <body>
-<header class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
-    <a class="navbar-brand mr-0 mr-md-2" href="{{ url_for('index') }}">Campeonato de Domino</a>
-    <div class="navbar-nav-scroll">
-        <ul class="navbar-nav bd-navbar-nav flex-row">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPlayers" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Jugadores
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownPlayers">
-                    <a class="dropdown-item" href="{{ url_for('players.index') }}">Listado</a>
-                    <a class="dropdown-item" href="{{ url_for('players.new') }}">Nuevo</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPlayers" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Estadisticas
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownPlayers">
-                    <a class="dropdown-item" href="{{ url_for('statistics.index', tab='leader-board') }}">Ranking personal</a>
-                    <a class="dropdown-item" href="{{ url_for('statistics.index', tab='team-leader-board') }}">Ranking de parejas</a>
-                    <a class="dropdown-item" href="{{ url_for('statistics.index', tab='versus-leader-board') }}">VS. personal</a>
-                    <a class="dropdown-item" href="{{ url_for('statistics.index', tab='versus-team-leader-board') }}">VS. de parejas</a>
-                </div>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('games.new') }}" tabindex="-1" aria-disabled="true">Jugar!</a>
-            </li>
-        </ul>
+<header class="navbar sticky-top navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+    <div class="container px-3">
+        <a class="navbar-brand mr-0 mr-md-2" href="{{ url_for('index') }}">Campeonato de Domino</a>
+        {% if tv %}
+            <div class="w-100 text-muted font-weight-lighter">Modo TV</div>
+        {% else %}
+            <div class="navbar-nav-scroll">
+                <ul class="navbar-nav bd-navbar-nav flex-row">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPlayers" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Jugadores
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownPlayers">
+                            <a class="dropdown-item" href="{{ url_for('players.index') }}">Listado</a>
+                            <a class="dropdown-item" href="{{ url_for('players.new') }}">Nuevo</a>
+                            <a class="dropdown-item" href="{{ url_for('players.annotate') }}">Anotar partidos</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPlayers" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Estadisticas
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownPlayers">
+                            <a class="dropdown-item" href="{{ url_for('statistics.index', tab='leader-board') }}">Ranking
+                                personal</a>
+                            <a class="dropdown-item" href="{{ url_for('statistics.index', tab='team-leader-board') }}">Ranking
+                                de parejas</a>
+                            <a class="dropdown-item"
+                               href="{{ url_for('statistics.index', tab='versus-leader-board') }}">VS.
+                                personal</a>
+                            <a class="dropdown-item"
+                               href="{{ url_for('statistics.index', tab='versus-team-leader-board') }}">VS. de
+                                parejas</a>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('games.new') }}" tabindex="-1"
+                           aria-disabled="true">Jugar!</a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+        <div class="text-white w-100 text-center text-md-right font-italic">"Conmigo no... con la tabla..."</div>
     </div>
-
 </header>
 <main>
     <div class="container mt-4">
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message[0] == 'message' %}
-                        {% set message_class = 'info' %}
-                    {% elif message[0] == 'error' %}
-                        {% set message_class = 'danger' %}
-                    {% else %}
-                        {% set message_class = message[0] %}
-                    {% endif %}
-                    <div class="alert alert-{{ message_class }} alert-dismissible fade show" role="alert">
-                        {% if message[0] == 'error' %}<b>ERROR:</b> {% endif %}{{ message[1] }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% if not tv %}
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message[0] == 'message' %}
+                            {% set message_class = 'info' %}
+                        {% elif message[0] == 'error' %}
+                            {% set message_class = 'danger' %}
+                        {% else %}
+                            {% set message_class = message[0] %}
+                        {% endif %}
+                        <div class="alert alert-{{ message_class }} alert-dismissible fade show" role="alert">
+                            {% if message[0] == 'error' %}<b>ERROR:</b> {% endif %}{{ message[1] }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        {% endif %}
 
         {% block content %}{% endblock %}
     </div>

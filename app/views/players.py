@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, jsonify
 from sqlalchemy.orm import load_only
 
 from app import db
-from app.forms import PlayerForm
+from app.forms import PlayerForm, PlayerAnnotateForm
 from app.models import Player
 
 bp = Blueprint('players', __name__, url_prefix='/players')
@@ -28,6 +28,24 @@ def new():
 
         return redirect(url_for('players.index'))
     return render_template('players/new.html', title='Nuevo jugador', form=form)
+
+
+@bp.route('/annotate', methods=['GET', 'POST'])
+def annotate():
+    form = PlayerAnnotateForm()
+    form.id.choices = [(0, '')] + [(p.id, p.name) for p in Player.query.order_by(Player.name).all()]
+
+    if form.validate_on_submit():
+        player = Player.query.filter(Player.id == form.id.data).one_or_none()
+
+        if player:
+            player.manual_wins += form.manual_wins.data
+            player.manual_loses += form.manual_loses.data
+
+            db.session.commit()
+
+        return redirect(url_for('players.index'))
+    return render_template('players/annotate.html', title='Anotar partidos', form=form)
 
 
 @bp.route('/game-player-for/', defaults={'current_players': []})

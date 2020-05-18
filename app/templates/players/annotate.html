@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-10 col-sm-8 col-md-6 col-lg-4 mx-auto">
+            <div class="card">
+                <h5 class="card-header text-center mb-0">Crear jugador</h5>
+                <div class="card-body">
+                    {% include 'players/_annotate_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+    <script type="text/javascript">
+    $(document).ready(() => {
+        $('.select2').select2()
+    })
+    </script>
+{% endblock %}

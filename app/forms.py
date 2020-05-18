@@ -17,6 +17,14 @@ class PlayerForm(FlaskForm):
     submit = SubmitField('Guardar')
 
 
+class PlayerAnnotateForm(FlaskForm):
+    id = SelectField('Jugador', coerce=int,
+                     validators=[DataRequired(message='Debe definir un jugador')])
+    manual_wins = IntegerField('Puntos ganados iniciales', default=0)
+    manual_loses = IntegerField('Puntos perdidos iniciales', default=0)
+    submit = SubmitField('Guardar')
+
+
 class GameForm(FlaskForm):
     team1_player1_id = SelectField('Pareja 1 / Jugador 1', coerce=int,
                                    validators=[DataRequired(message='Debe definir un jugador')])

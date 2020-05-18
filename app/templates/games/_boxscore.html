@@ -5,34 +5,39 @@
     {% set game_class = 'warning' %}
     {% set game_class_title = 'POLLONA' %}
 {% else %}
-    {% set game_class = 'info' %}
+    {% set game_class = 'primary' %}
     {% set game_class_title = 'PARTIDO' %}
 {% endif %}
 
-<table class="table">
+<table class="table mb-4">
     <thead>
-    <tr class="row m-0">
-        <td class="col-6 text-center{% if game.team1_score < 150 %} table-active{% else %} table-{{ game_class }}{% endif %}">
+    <tr class="row m-0 table-{{ game_class }}" style="position: relative">
+        <td class="col-6 text-center{% if game.team1_score > game.team2_score %} font-weight-bolder{% endif %}">
             {{ game.team1_player1.name }}
             <hr class="my-1"/>
             {{ game.team1_player2.name }}
         </td>
-        <td class="col-6 text-center{% if game.team2_score < 150 %} table-active{% else %} table-{{ game_class }}{% endif %}">
+        <td class="col-6 text-center{% if game.team1_score < game.team2_score %} font-weight-bolder{% endif %}">
             {{ game.team2_player1.name }}
             <hr class="my-1"/>
             {{ game.team2_player2.name }}
+            {% if game.points > 1 %}
+                <span class="badge badge-pill badge-{{ game_class }}" style="position: absolute; left: -0.9rem; top: 2rem">x{{ game.points }}</span>
+            {% endif %}
         </td>
     </tr>
-    <tr class="m-0" data-toggle="collapse" data-target="#datas-{{ game.id }}"
-        aria-expanded="true" aria-controls="datas-{{ game.id }}" style="cursor: pointer;">
-        <th scope="row" class="p-0 table-{{ game_class }} text-{{ game_class }} text-center">
-            &laquo; {{ game_class_title }} &raquo;
-        </th>
+    <tr class="row m-0 table-light">
+        <td class="col-6 text-center{% if game.team1_score > game.team2_score %} font-weight-bolder{% endif %}">{{ game.team1_score }}</td>
+        <td class="col-6 text-center{% if game.team1_score < game.team2_score %} font-weight-bolder{% endif %}">{{ game.team2_score }}</td>
+    </tr>
+    <tr data-toggle="collapse" data-target="#datas-{{ game.id }}"
+        aria-expanded="true" aria-controls="datas-{{ game.id }}" style="cursor: pointer">
+        <td class="p-0 table-active text-center">DATAS</td>
     </tr>
     </thead>
     <tbody class="collapse" id="datas-{{ game.id }}">
     {% for data in game.game_datas %}
-        <tr class="row m-0 text-center">
+        <tr class="row m-0 table-light text-center border-bottom">
             {% if data.is_for_team1 %}
                 <td class="col-6 font-weight-bold">{{ data.score }}</td>
                 <td class="col-6 text-muted">0</td>
@@ -43,11 +48,4 @@
         </tr>
     {% endfor %}
     </tbody>
-    <thead>
-    <tr class="row m-0">
-        <th scope="row"
-            class="col-6 text-center{% if game.team1_score < 150 %} table-active{% else %} table-{{ game_class }}{% endif %}">{{ game.team1_score }}</th>
-        <th class="col-6 text-center{% if game.team2_score < 150 %} table-active{% else %} table-{{ game_class }}{% endif %}">{{ game.team2_score }}</th>
-    </tr>
-    </thead>
 </table>

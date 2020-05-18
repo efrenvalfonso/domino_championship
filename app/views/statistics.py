@@ -54,60 +54,10 @@ def team_leader_board():
         join(players2,
              or_(Game.team1_player2_id == players2.id,
                  Game.team2_player2_id == players2.id)). \
-        filter(players1.id != players2.id). \
+        filter(Game.finished_at.isnot(None), players1.id != players2.id). \
         group_by(players1.id, players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
         order_by(db.text(request.args.get('team_leader_board_order_by', 'balance DESC')))
-
-
-def versus_leader_board():
-    players = aliased(Player)
-    other_players = aliased(Player)
-
-    return db.session.query(
-        players.id,
-        players.name,
-        other_players.id,
-        other_players.name,
-        func.sum(func.coalesce(case([
-            (and_(or_(Game.team1_player1_id == players.id, Game.team1_player2_id == players.id),
-                  not_(or_(Game.team1_player1_id == other_players.id, Game.team1_player2_id == other_players.id))),
-             case([(Game.team1_score >= 150, Game.points)])),
-            (and_(or_(Game.team2_player1_id == players.id, Game.team2_player2_id == players.id),
-                  not_(or_(Game.team2_player1_id == other_players.id, Game.team2_player2_id == other_players.id))),
-             case([(Game.team2_score >= 150, Game.points)]))
-        ]), 0)).label('wins_score'),
-        func.sum(func.coalesce(case([
-            (and_(or_(Game.team1_player1_id == players.id, Game.team1_player2_id == players.id),
-                  not_(or_(Game.team1_player1_id == other_players.id, Game.team1_player2_id == other_players.id))),
-             case([(Game.team1_score < 150, Game.points)])),
-            (and_(or_(Game.team2_player1_id == players.id, Game.team2_player2_id == players.id),
-                  not_(or_(Game.team2_player1_id == other_players.id, Game.team2_player2_id == other_players.id))),
-             case([(Game.team2_score < 150, Game.points)]))
-        ]), 0)).label('loses_score'),
-        func.sum(func.coalesce(case([
-            (and_(or_(Game.team1_player1_id == players.id, Game.team1_player2_id == players.id),
-                  not_(or_(Game.team1_player1_id == other_players.id, Game.team1_player2_id == other_players.id))),
-             case([(Game.team1_score < 150, -1)], else_=1) * Game.points),
-            (and_(or_(Game.team2_player1_id == players.id, Game.team2_player2_id == players.id),
-                  not_(or_(Game.team2_player1_id == other_players.id, Game.team2_player2_id == other_players.id))),
-             case([(Game.team2_score < 150, -1)], else_=1) * Game.points)
-        ]), 0)).label('balance'),
-    ). \
-        select_from(Game). \
-        join(players,
-             or_(Game.team1_player1_id == players.id,
-                 Game.team1_player2_id == players.id,
-                 Game.team2_player1_id == players.id,
-                 Game.team2_player2_id == players.id)). \
-        join(other_players,
-             or_(Game.team1_player1_id == other_players.id,
-                 Game.team1_player2_id == other_players.id,
-                 Game.team2_player1_id == other_players.id,
-                 Game.team2_player2_id == other_players.id)). \
-        group_by(players.id, other_players.id). \
-        having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
-        order_by(db.text(request.args.get('versus_leader_board_order_by', 'balance DESC')))
 
 
 def versus_team_leader_board():
@@ -157,7 +107,7 @@ def versus_team_leader_board():
         join(other_players2,
              or_(Game.team1_player2_id == other_players2.id,
                  Game.team2_player2_id == other_players2.id)). \
-        filter(and_(players1.id != other_players1.id, players2.id != other_players2.id)). \
+        filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id)). \
         group_by(players1.id, players2.id, other_players1.id, other_players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
         order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC')))

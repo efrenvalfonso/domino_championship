@@ -11,9 +11,10 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
-from .util import ListConverter
+from .util import ListConverter, BooleanConverter
 
 app.url_map.converters['list'] = ListConverter
+app.url_map.converters['bool'] = BooleanConverter
 
 from app import models
 from app.views import dashboard, players, games, game_datas, statistics

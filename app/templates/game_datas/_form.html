@@ -9,10 +9,10 @@
             </div>
         </div>
         <div class="col-6 col-sm-4 pl-1">
-            <button type="button" class="btn btn-success w-100 px-0" onclick="raiseModal(this)"
+            <button type="button" class="btn btn-outline-primary w-100 px-0" onclick="raiseAnnotationModal(this)"
                     data-team-members="{% if form.is_for_team1.data == 1 %}{{ current_game.team1_player1.name }} y {{ current_game.team1_player2.name }}{% else %}{{ current_game.team2_player1.name }} y {{ current_game.team2_player2.name }}{% endif %}">
-                <span class="d-none d-md-block">{{ form.submit.label.text }}</span>
-                <span class="d-block d-md-none">+</span>
+                <span class="d-none d-lg-block">{{ form.submit.label.text }}</span>
+                <span class="d-block d-lg-none">+</span>
             </button>
         </div>
     </div>

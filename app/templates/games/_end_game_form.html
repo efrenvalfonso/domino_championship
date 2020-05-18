@@ -1,0 +1,8 @@
+<form action="{{ url_for('games.end', game_id=game_id, team1_won=team1_won) }}" method="post">
+    <button type="button" class="btn btn-outline-secondary w-100" onclick="raiseVictoryModal(this)"
+            data-team-members="{% if team1_won %}{{ current_game.team1_player1.name }} y
+                {{ current_game.team1_player2.name }}{% else %}{{ current_game.team2_player1.name }} y
+                {{ current_game.team2_player2.name }}{% endif %}">
+        Victoria!
+    </button>
+</form>

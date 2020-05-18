@@ -1,0 +1,6 @@
+<form action="{{ url_for('game_datas.delete', game_data_id=data.id) }}" method="post">
+    <button type="button" class="text-danger border-0 font-weight-bold"
+            onclick="raiseRemoveDataModal(this)"
+            style="background: none">&times;
+    </button>
+</form>

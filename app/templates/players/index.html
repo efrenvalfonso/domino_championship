@@ -4,8 +4,13 @@
     <div class="card">
         <h5 class="card-header text-center">Lista de jugadores</h5>
         <div class="card-body">
-        <div class="text-center">
-            <a href="{{ url_for('players.new') }}" class="btn btn-primary mb-3">Crear jugador</a>
+        <div class="row">
+            <div class="col-12 col-sm-6 text-center">
+                <a href="{{ url_for('players.new') }}" class="btn btn-success mb-3">Nuevo jugador</a>
+            </div>
+            <div class="col-12 col-sm-6 text-center">
+                <a href="{{ url_for('players.annotate') }}" class="btn btn-success mb-3">Anotar puntos</a>
+            </div>
         </div>
             <table class="table">
                 <thead>
