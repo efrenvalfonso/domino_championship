@@ -10,5 +10,5 @@ class Config(object):
                               'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    if os.environ['FLASK_ENV'] == 'development':
+    if os.environ.get('FLASK_ENV') == 'development':
         SQLALCHEMY_ECHO = True
