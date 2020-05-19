@@ -23,7 +23,8 @@ def index(tv=False):
                                last_games=last_games,
                                leader_board=leader_board(),
                                tv=tv,
-                               versus_leader_board=versus_leader_board() if tv else None)
+                               versus_leader_board=versus_leader_board() if tv else None,
+                               leader_board_today=leader_board(True) if tv else None)
 
     current_game_status = 1
 
@@ -69,7 +70,8 @@ def index(tv=False):
                            last_games=last_games,
                            leader_board=leader_board(),
                            tv=tv,
-                           versus_leader_board=versus_leader_board() if tv else None)
+                           versus_leader_board=versus_leader_board() if tv else None,
+                           leader_board_today=leader_board(True) if tv else None)
 
 
 @bp.route('/tv')

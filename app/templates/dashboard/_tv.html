@@ -52,17 +52,26 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-5">
+    <div class="col-6">
         <div class="card">
             <h5 class="card-header text-center">Ranking personal</h5>
             <div class="card-body">
-                {% with data = leader_board %}
-                    {% include 'statistics/_leader_board.html' %}
-                {% endwith %}
+                <div class="row">
+                    <div class="col-6">
+                        {% with data = leader_board %}
+                            {% include 'statistics/_leader_board.html' %}
+                        {% endwith %}
+                    </div>
+                    <div class="col-6">
+                        {% with data = leader_board_today %}
+                            {% include 'statistics/_leader_board.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-7">
+    <div class="col-6">
         <div class="card">
             <h5 class="card-header text-center">Enfrentamientos personales</h5>
             <div class="card-body">

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from dateutil.tz import tz
 from flask import request
 from sqlalchemy import func, case, or_, and_, not_
 from sqlalchemy.orm import aliased
@@ -25,8 +28,8 @@ class BooleanConverter(BaseConverter):
         return '1' if value else '0'
 
 
-def leader_board():
-    return db.session.query(
+def leader_board(today=False):
+    query = db.session.query(
         Player.id,
         Player.name,
         (func.sum(func.coalesce(case([
@@ -54,8 +57,18 @@ def leader_board():
                  Game.team1_player2_id == Player.id,
                  Game.team2_player1_id == Player.id,
                  Game.team2_player2_id == Player.id),
-             isouter=True). \
-        filter(Game.finished_at.isnot(None)). \
+             isouter=True)
+
+    if today:
+        est = tz.gettz('utc')
+        today = datetime.now()
+        beginning_of_today = datetime(today.year, today.month, today.day).astimezone(est)
+
+        query = query.filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today)))
+    else:
+        query = query.filter(Game.finished_at.isnot(None))
+
+    return query. \
         group_by(Player.id). \
         order_by(db.text(request.args.get('leader_board_order_by', 'balance DESC, wins_score DESC')))
 
