@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{% if title %}{{ title }} -{% else %}Bienvenido al{% endif %} Campeonato de Domino"</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='css/select2.min.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
 </head>
-<body>
+<body class="pb-4">
 <header class="navbar sticky-top navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
     <a class="navbar-brand mr-0 mr-md-2" href="{{ url_for('index') }}">Campeonato de Domino</a>
     {% if tv %}
@@ -48,10 +49,10 @@
                     <a class="nav-link" href="{{ url_for('games.new') }}" tabindex="-1"
                        aria-disabled="true">Comenzar</a>
                 </li>
-{#                <li class="nav-item">#}
-{#                    <a class="nav-link" href="{{ url_for('dashboard.tv') }}" tabindex="-1"#}
-{#                       aria-disabled="true">TV</a>#}
-{#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link" href="{{ url_for('dashboard.tv') }}" tabindex="-1"#}
+                {#                       aria-disabled="true">TV</a>#}
+                {#                </li>#}
             </ul>
         </div>
     {% endif %}

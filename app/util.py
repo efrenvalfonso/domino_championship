@@ -60,9 +60,8 @@ def leader_board(today=False):
              isouter=True)
 
     if today:
-        est = tz.gettz('utc')
         today = datetime.now()
-        beginning_of_today = datetime(today.year, today.month, today.day).astimezone(est)
+        beginning_of_today = datetime(today.year, today.month, today.day, 0, 0).astimezone(tz.gettz('utc'))
 
         query = query.filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today)))
     else:

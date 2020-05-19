@@ -1,5 +1,6 @@
-import datetime
+from datetime import datetime
 
+from dateutil.tz import tz
 from flask import Blueprint, render_template
 from sqlalchemy import and_
 
@@ -13,14 +14,15 @@ bp = Blueprint('dashboard', __name__)
 @bp.route('/')
 def index(tv=False):
     current_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
-    last_games = Game.query. \
-        filter(
-        and_(Game.finished_at.isnot(None), Game.started_at.__gt__(datetime.datetime.utcnow() - datetime.timedelta(1)))). \
+    today = datetime.now()
+    beginning_of_today = datetime(today.year, today.month, today.day, 0, 0).astimezone(tz.gettz('utc'))
+    today_games = Game.query. \
+        filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today))). \
         order_by(Game.started_at.desc())
 
     if not current_game:
         return render_template('dashboard/index.html',
-                               last_games=last_games,
+                               today_games=today_games,
                                leader_board=leader_board(),
                                tv=tv,
                                versus_leader_board=versus_leader_board() if tv else None,
@@ -67,7 +69,7 @@ def index(tv=False):
                            current_game_status=current_game_status,
                            team1_game_data_form=team1_game_data_form,
                            team2_game_data_form=team2_game_data_form,
-                           last_games=last_games,
+                           today_games=today_games,
                            leader_board=leader_board(),
                            tv=tv,
                            versus_leader_board=versus_leader_board() if tv else None,

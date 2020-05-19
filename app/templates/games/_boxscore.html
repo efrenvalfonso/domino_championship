@@ -22,7 +22,8 @@
             <hr class="my-1"/>
             {{ game.team2_player2.name }}
             {% if game.points > 1 %}
-                <span class="badge badge-pill badge-{{ game_class }}" style="position: absolute; left: -0.9rem; top: 2rem">x{{ game.points }}</span>
+                <span class="badge badge-pill badge-{{ game_class }}"
+                      style="position: absolute; left: -0.9rem; top: 2rem">x{{ game.points }}</span>
             {% endif %}
         </td>
     </tr>
@@ -30,22 +31,26 @@
         <td class="col-6 text-center{% if game.team1_score > game.team2_score %} font-weight-bolder{% endif %}">{{ game.team1_score }}</td>
         <td class="col-6 text-center{% if game.team1_score < game.team2_score %} font-weight-bolder{% endif %}">{{ game.team2_score }}</td>
     </tr>
-    <tr data-toggle="collapse" data-target="#datas-{{ game.id }}"
-        aria-expanded="true" aria-controls="datas-{{ game.id }}" style="cursor: pointer">
-        <td class="p-0 table-active text-center">DATAS</td>
-    </tr>
+    {% if not tv %}
+        <tr data-toggle="collapse" data-target="#datas-{{ game.id }}"
+            aria-expanded="true" aria-controls="datas-{{ game.id }}" style="cursor: pointer">
+            <td class="p-0 table-active text-center">DATAS</td>
+        </tr>
+    {% endif %}
     </thead>
     <tbody class="collapse" id="datas-{{ game.id }}">
-    {% for data in game.game_datas %}
-        <tr class="row m-0 table-light text-center border-bottom">
-            {% if data.is_for_team1 %}
-                <td class="col-6 font-weight-bold">{{ data.score }}</td>
-                <td class="col-6 text-muted">0</td>
-            {% else %}
-                <td class="col-6 text-muted">0</td>
-                <td class="col-6 font-weight-bold">{{ data.score }}</td>
-            {% endif %}
-        </tr>
-    {% endfor %}
+    {% if not tv %}
+        {% for data in game.game_datas %}
+            <tr class="row m-0 table-light text-center border-bottom">
+                {% if data.is_for_team1 %}
+                    <td class="col-6 font-weight-bold">{{ data.score }}</td>
+                    <td class="col-6 text-muted">0</td>
+                {% else %}
+                    <td class="col-6 text-muted">0</td>
+                    <td class="col-6 font-weight-bold">{{ data.score }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% endif %}
     </tbody>
 </table>

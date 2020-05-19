@@ -1,21 +1,21 @@
-<table class="table table-hover">
+<table class="table table-hover m-0">
     <thead>
     <tr class="table-info row m-0">
-        <th scope="col" class="text-center col-1 pt-2 pr-2 pb-2">#</th>
-        <th scope="col" class="col p-2">Jugador</th>
-        <th scope="col" class="col p-2">Rival</th>
+        <th scope="col" class="text-center col pt-2 pr-2 pb-2 border-top-0">#</th>
+        <th scope="col" class="col-3 p-2 border-top-0">Jugador</th>
+        <th scope="col" class="col-3 p-2 border-top-0">Rival</th>
         {% if tv %}
-            <th scope="col" class="text-right col-2 p-2">G</th>
-            <th scope="col" class="text-right col-2 p-2">P</th>
-            <th scope="col" class="text-right col-2 pt-2 pl-2 pb-2">+/-</th>
+            <th scope="col" class="text-right col p-2 border-top-0">G</th>
+            <th scope="col" class="text-right col p-2 border-top-0">P</th>
+            <th scope="col" class="text-right col pt-2 pl-2 pb-2 border-top-0">+/-</th>
         {% else %}
-            <th scope="col" class="text-right col-2 p-2">
+            <th scope="col" class="text-right col p-2 border-top-0">
                 <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='wins_score DESC') }}">G</a>
             </th>
-            <th scope="col" class="text-right col-2 p-2">
+            <th scope="col" class="text-right col p-2 border-top-0">
                 <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='loses_score DESC') }}">P</a>
             </th>
-            <th scope="col" class="text-right col-2 pt-2 pl-2 pb-2">
+            <th scope="col" class="text-right col pt-2 pl-2 pb-2 border-top-0">
                 <a href="{{ url_for(request.endpoint, tab='versus-leader-board', versus_leader_board_order_by='balance DESC, wins_score DESC') }}">+/-</a>
             </th>
         {% endif %}
@@ -24,8 +24,8 @@
     <tbody>
     {% set first_second_half_index = (data.count() / 2) | int %}
     {% for record in data %}
-        <tr class="row m-0{% if loop.index == first_second_half_index %} border-bottom{% endif %} table-{% if record[6] < -5 %}danger{% elif record[6] < 6 %}warning{% else %}default{% endif %}">
-            <th scope="row" class="text-center col-1 pt-2 pr-2 pb-2">
+        <tr class="row m-0{% if loop.index == first_second_half_index %} border-bottom{% endif %} table-{% if record[6] < 0 %}danger{% elif record[6] == 0 %}warning{% else %}default{% endif %}">
+            <th scope="row" class="text-center col pt-2 pr-2 pb-2">
                 {% if loop.index < 4 %}
                     <img src="{{ url_for('static', filename='img/medal-' + (loop.index | string) + '.svg') }}"
                          alt="{{ loop.index }}" style="height: 1.37em"/>
@@ -33,11 +33,11 @@
                     {{ loop.index }}
                 {% endif %}
             </th>
-            <td class="col p-2">{{ record[1] }}</td>
-            <td class="col p-2">{{ record[3] }}</td>
-            <td class="text-right col-2 p-2">{{ record[4] }}</td>
-            <td class="text-right col-2 p-2">{{ record[5] }}</td>
-            <th scope="row" class="text-right col-2 pt-2 pl-2 pb-2">{{ record[6] }}</th>
+            <td class="col-3 p-2">{{ record[1] }}</td>
+            <td class="col-3 p-2">{{ record[3] }}</td>
+            <td class="text-right col p-2">{{ record[4] }}</td>
+            <td class="text-right col p-2">{{ record[5] }}</td>
+            <th scope="row" class="text-right col pt-2 pl-2 pb-2">{{ record[6] }}</th>
         </tr>
     {% endfor %}
     </tbody>
