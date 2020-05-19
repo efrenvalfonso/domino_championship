@@ -63,9 +63,13 @@
     <div class="col-3">
         <div class="card">
             <h5 class="card-header text-center">Ranking hoy</h5>
-            {% with data = leader_board_today %}
-                {% include 'statistics/_leader_board.html' %}
-            {% endwith %}
+            {% if leader_board_today.count() > 0 %}
+                {% with data = leader_board_today %}
+                    {% include 'statistics/_leader_board.html' %}
+                {% endwith %}
+            {% else %}
+                <div class="card-body text-center">No se ha jugado</div>
+            {% endif %}
         </div>
     </div>
     <div class="col-4">
@@ -79,11 +83,15 @@
     <div class="col-2">
         <div class="card row">
             <h5 class="card-header text-center">Partidos de hoy</h5>
-            {% for game in today_games %}
-                <div class="col-12 p-0">
-                    {% include 'games/_boxscore.html' %}
-                </div>
-            {% endfor %}
+            {% if leader_board_today.count() > 0 %}
+                {% for game in today_games %}
+                    <div class="col-12 p-0">
+                        {% include 'games/_boxscore.html' %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="card-body text-center">No se ha jugado</div>
+            {% endif %}
         </div>
     </div>
 </div>
