@@ -13,6 +13,11 @@
     <a class="navbar-brand mr-0 mr-md-2" href="{{ url_for('index') }}">Campeonato de Domino</a>
     {% if tv %}
         <div class="w-100 text-muted font-weight-lighter">Modo TV</div>
+        <div class="w-100">
+            <h4 class="text-white text-center mb-0 position-absolute" style="left: 0; right: 0; top: 25%">
+                <span id="clock-hour"></span><span id="clock-colon">:</span><span id="clock-minutes"></span><span id="clock-m"></span>
+            </h4>
+        </div>
     {% else %}
         <div class="navbar-nav-scroll">
             <ul class="navbar-nav bd-navbar-nav flex-row">
@@ -95,6 +100,32 @@
         $(".alert.alert-dismissible").fadeTo(5000, 500).slideUp(500, function () {
             $(".alert.alert-dismissible").slideUp(500);
         });
+
+        const clockUpdate = (showColon = true) => {
+            const now = new Date()
+            const hours = now.getHours() % 12
+            const minutes = (now.getMinutes() < 10 ? '0' : '') + now.getMinutes()
+
+            $('#clock-hour').text(hours === 0 ? 12 : hours)
+            $('#clock-minutes').text(minutes)
+            $('#clock-m').text(` ${now.getHours() < 12 ? 'a' : 'p'}.m.`)
+
+            if (showColon) {
+                $('#clock-colon').fadeTo(0, 1)
+
+                setTimeout(() => {
+                    clockUpdate(false);
+                }, 500);
+            } else {
+                $('#clock-colon').fadeTo(0, 0)
+
+                setTimeout(() => {
+                    clockUpdate(true);
+                }, 500);
+            }
+        }
+
+        clockUpdate()
     })
 </script>
 {% block custom_js %}{% endblock %}

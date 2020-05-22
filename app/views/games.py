@@ -46,8 +46,8 @@ def new():
 
         return redirect(url_for('index'))
 
-    if request.args.get('continue') is not None:
-        last_game = Game.query.filter(Game.finished_at.isnot(None)).order_by(Game.started_at.desc()).first()
+    if request.args.get('continue') is not None and request.args.get('continue') == '1':
+        last_game = Game.query.filter(Game.finished_at.isnot(None)).order_by(Game.finished_at.desc()).first()
 
         if last_game:
             if last_game.team1_score > last_game.team2_score:

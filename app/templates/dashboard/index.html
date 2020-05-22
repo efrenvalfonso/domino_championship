@@ -245,7 +245,7 @@
 
                 setTimeout(() => {
                     countdown(remaining - 1);
-                }, 1000);
+                }, 60000);
             }
 
             countdown(10)
@@ -264,7 +264,6 @@
 
                 flash()
             })
-
         {% else %}
             const raiseAnnotationModal = (target) => {
                 const button = $(target)
