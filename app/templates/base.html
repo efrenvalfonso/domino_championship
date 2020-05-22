@@ -13,8 +13,8 @@
     <a class="navbar-brand mr-0 mr-md-2" href="{{ url_for('index') }}">Campeonato de Domino</a>
     {% if tv %}
         <div class="w-100 text-muted font-weight-lighter">Modo TV</div>
-        <div class="w-100">
-            <h4 class="text-white text-center mb-0 position-absolute" style="left: 0; right: 0; top: 25%">
+        <div class="w-100 text-center position-absolute" style="left: 0; right: 0; top: 25%; z-index: -1">
+            <h4 class="text-white mb-0">
                 <span id="clock-hour"></span><span id="clock-colon">:</span><span id="clock-minutes"></span><span id="clock-m"></span>
             </h4>
         </div>

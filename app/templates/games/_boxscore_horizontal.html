@@ -1,0 +1,40 @@
+{% if game.points == 3 %}
+    {% set game_class = 'danger' %}
+    {% set game_class_title = 'RECULA' %}
+{% elif game.points == 2 %}
+    {% set game_class = 'warning' %}
+    {% set game_class_title = 'POLLONA' %}
+{% else %}
+    {% set game_class = 'primary' %}
+    {% set game_class_title = 'PARTIDO' %}
+{% endif %}
+
+<table class="table table-borderless m-0">
+    <tbody id="datas-{{ game.id }}">
+    <tr class="row m-0 table-{% if game.team1_score > game.team2_score %}{{ game_class }} font-weight-bolder{% else %}active{% endif %}" style="position: relative">
+        <td class="col-9">
+            {{ game.team1_player1.name }} - {{ game.team1_player2.name }}
+        </td>
+        <td class="col-3 text-right border-left">
+            {{ game.team1_score }}
+        </td>
+    </tr>
+    <tr class="row m-0 table-{% if game.team1_score < game.team2_score %}{{ game_class }} font-weight-bolder{% else %}active{% endif %}">
+        <td class="col-9">
+            {{ game.team2_player1.name }} - {{ game.team2_player2.name }}
+        </td>
+        <td class="col-3 text-right border-left">
+            {{ game.team2_score }}
+        </td>
+    </tr>
+    </tbody>
+</table>
+{#<td class="col-6 text-center{% if game.team1_score < game.team2_score %} font-weight-bolder{% endif %}">#}
+{#    {{ game.team2_player1.name }}#}
+{#    <hr class="my-1"/>#}
+{#    {{ game.team2_player2.name }}#}
+{#    {% if game.points > 1 %}#}
+{#        <span class="badge badge-pill badge-{{ game_class }}"#}
+{#              style="position: absolute; left: -0.9rem; top: 2rem">x{{ game.points }}</span>#}
+{#    {% endif %}#}
+{#</td>#}

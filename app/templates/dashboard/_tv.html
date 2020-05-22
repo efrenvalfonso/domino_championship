@@ -83,10 +83,14 @@
     <div class="col-2">
         <div class="card">
             <h5 class="card-header text-center">Partidos de hoy</h5>
-            {% if leader_board_today.count() > 0 %}
+            {% set count = today_games.count() %}
+            {% if count > 0 %}
                 {% for game in today_games %}
                     <div class="col-12 p-0">
-                        {% include 'games/_boxscore.html' %}
+                        {% include 'games/_boxscore_horizontal.html' %}
+                        {% if loop.index < count %}
+                            <hr class="my-2"/>
+                        {% endif %}
                     </div>
                 {% endfor %}
             {% else %}

@@ -283,6 +283,7 @@
 
                         annotationModalSubmit.off('click')
                         annotationModalSubmit.on('click', (e) => {
+                            annotationModalSubmit.attr('disabled', true)
                             form.submit()
                         })
                     }
@@ -292,7 +293,8 @@
             }
 
             const raiseRemoveDataModal = (target) => {
-                const form = $(target).parents('form')
+                const button = $(target)
+                const form = button.parents('form')
                 const modal = $('#remove-data-modal')
                 const removeDataSubmit = $('#remove-data-submit')
 
@@ -300,6 +302,7 @@
 
                 removeDataSubmit.off('click')
                 removeDataSubmit.on('click', (e) => {
+                    removeDataSubmit.attr('disabled', true)
                     form.submit()
                 })
             }
@@ -315,7 +318,7 @@
 
                 victorySubmit.off('click')
                 victorySubmit.on('click', (e) => {
-                    console.log(form)
+                    victorySubmit.attr('disabled', true)
                     form.submit()
                 })
             }
