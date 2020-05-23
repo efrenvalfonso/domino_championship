@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dateutil.tz import tz
 from flask import request
@@ -60,9 +60,8 @@ def leader_board(today=False):
              isouter=True)
 
     if today:
-        today = datetime.now()
+        today = datetime.now() - timedelta(hours=8)
         beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
-
         query = query.filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today)))
     else:
         query = query.filter(Game.finished_at.isnot(None))
@@ -213,9 +212,8 @@ def versus_team_leader_board(today=False):
                  Game.team2_player2_id == other_players2.id))
 
     if today:
-        today = datetime.now()
+        today = datetime.now() - timedelta(hours=8)
         beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
-
         query = query.filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id, Game.started_at.__gt__(beginning_of_today)))
     else:
         query = query.filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id))

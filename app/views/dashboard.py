@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dateutil.tz import tz
 from flask import Blueprint, render_template
@@ -14,7 +14,7 @@ bp = Blueprint('dashboard', __name__)
 @bp.route('/')
 def index(tv=False):
     current_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
-    today = datetime.now()
+    today = datetime.now() - timedelta(hours=8)
     beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
     today_games = Game.query. \
         filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today))). \
