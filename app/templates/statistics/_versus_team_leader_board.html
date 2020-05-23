@@ -1,25 +1,31 @@
 <table class="table table-hover m-0">
     <thead>
     <tr class="table-info row m-0">
-        <th scope="col" class="text-center px-2 border-top-0" style="width: 12%">#</th>
+        <th scope="col" class="text-center pr-2 border-top-0" style="width: 12%">#</th>
         <th scope="col" class="px-2 border-top-0" style="width: 26%">Pareja</th>
         <th scope="col" class="px-2 border-top-0" style="width: 26%">Rival</th>
-        <th scope="col" class="text-right px-2 border-top-0" style="width: 12%">
-            <a href="{{ url_for(request.endpoint, tab='versus-team-leader-board', versus_team_leader_board_order_by='wins_score DESC') }}">G</a>
-        </th>
-        <th scope="col" class="text-right px-2 border-top-0" style="width: 12%">
-            <a href="{{ url_for(request.endpoint, tab='versus-team-leader-board', versus_team_leader_board_order_by='loses_score DESC') }}">P</a>
-        </th>
-        <th scope="col" class="text-right col-1 px-2 border-top-0" style="width: 12%">
-            <a href="{{ url_for(request.endpoint, tab='versus-team-leader-board', versus_team_leader_board_order_by='balance DESC, wins_score DESC') }}">+/-</a>
-        </th>
+        {% if tv %}
+            <th scope="col" class="text-right px-2 border-top-0" style="width: 12%">G</th>
+            <th scope="col" class="text-right px-2 border-top-0" style="width: 12%">P</th>
+            <th scope="col" class="text-right pl-2 order-top-0" style="width: 12%">+/-</th>
+        {% else %}
+            <th scope="col" class="text-right px-2 border-top-0" style="width: 12%">
+                <a href="{{ url_for(request.endpoint, tab='versus-team-leader-board', versus_team_leader_board_order_by='wins_score DESC') }}">G</a>
+            </th>
+            <th scope="col" class="text-right px-2 border-top-0" style="width: 12%">
+                <a href="{{ url_for(request.endpoint, tab='versus-team-leader-board', versus_team_leader_board_order_by='loses_score DESC') }}">P</a>
+            </th>
+            <th scope="col" class="text-right pl-2 border-top-0" style="width: 12%">
+                <a href="{{ url_for(request.endpoint, tab='versus-team-leader-board', versus_team_leader_board_order_by='balance DESC, wins_score DESC') }}">+/-</a>
+            </th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
     {% set first_second_half_index = (data.count() / 2) | int %}
     {% for record in data %}
         <tr class="row m-0{% if loop.index == first_second_half_index %} border-bottom{% endif %} table-{% if record[10] < 0 %}danger{% elif record[10] == 0 %}warning{% else %}default{% endif %}">
-            <th scope="row" class="text-center px-2" style="width: 12%">
+            <th scope="row" class="text-center pr-2" style="width: 12%">
                 {% if loop.index < 4 %}
                     <img src="{{ url_for('static', filename='img/medal-' + (loop.index | string) + '.svg') }}"
                          alt="{{ loop.index }}" style="height: 1.37em"/>
@@ -31,7 +37,7 @@
             <td class="px-2" style="width: 26%">{{ record[5] }}<br/>{{ record[7] }}</td>
             <td class="text-right px-2" style="width: 12%">{{ record[8] }}</td>
             <td class="text-right px-2" style="width: 12%">{{ record[9] }}</td>
-            <th scope="row" class="text-right px-2" style="width: 12%">{{ record[10] }}</th>
+            <th scope="row" class="text-right pl-2" style="width: 12%">{{ record[10] }}</th>
         </tr>
     {% endfor %}
     </tbody>

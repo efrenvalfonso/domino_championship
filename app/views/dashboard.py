@@ -6,7 +6,7 @@ from sqlalchemy import and_
 
 from app.forms import GameDataForm
 from app.models import Game
-from app.util import leader_board, versus_leader_board
+from app.util import leader_board, versus_leader_board, versus_team_leader_board
 
 bp = Blueprint('dashboard', __name__)
 
@@ -15,7 +15,7 @@ bp = Blueprint('dashboard', __name__)
 def index(tv=False):
     current_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
     today = datetime.now()
-    beginning_of_today = datetime(today.year, today.month, today.day, 0, 0).astimezone(tz.gettz('UTC'))
+    beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
     today_games = Game.query. \
         filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today))). \
         order_by(Game.started_at.desc())
@@ -25,8 +25,8 @@ def index(tv=False):
                                today_games=today_games,
                                leader_board=leader_board(),
                                tv=tv,
-                               versus_leader_board=versus_leader_board() if tv else None,
-                               leader_board_today=leader_board(True) if tv else None)
+                               leader_board_today=leader_board(True) if tv else None,
+                               versus_team_leader_board=versus_team_leader_board(True) if tv else None)
 
     current_game_status = 1
 
@@ -72,8 +72,8 @@ def index(tv=False):
                            today_games=today_games,
                            leader_board=leader_board(),
                            tv=tv,
-                           versus_leader_board=versus_leader_board() if tv else None,
-                           leader_board_today=leader_board(True) if tv else None)
+                           leader_board_today=leader_board(True) if tv else None,
+                           versus_team_leader_board=versus_team_leader_board(True) if tv else None)
 
 
 @bp.route('/tv')

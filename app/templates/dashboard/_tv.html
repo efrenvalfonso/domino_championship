@@ -74,9 +74,9 @@
     </div>
     <div class="col-4">
         <div class="card">
-            <h5 class="card-header text-center">Enfrentamientos personales</h5>
-            {% with data = versus_leader_board %}
-                {% include 'statistics/_versus_leader_board.html' %}
+            <h5 class="card-header text-center">Por parejas hoy</h5>
+            {% with data = versus_team_leader_board %}
+                {% include 'statistics/_versus_team_leader_board.html' %}
             {% endwith %}
         </div>
     </div>
