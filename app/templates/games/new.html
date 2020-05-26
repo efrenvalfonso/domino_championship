@@ -31,7 +31,7 @@
             })
 
             {% if form.team1_player1_id.default %}
-                team1player1Select.select2('val', '{{ form.team1_player1_id.default }}')
+                team1player1Select.val('{{ form.team1_player1_id.default }}').trigger('change')
                 preSelectedPlayers.push('{{ form.team1_player1_id.default }}')
             {% endif %}
 
@@ -64,7 +64,7 @@
             })
 
             {% if form.team1_player2_id.default %}
-                team1player2Select.select2('val', '{{ form.team1_player2_id.default }}')
+                team1player2Select.val('{{ form.team1_player2_id.default }}').trigger('change')
                 preSelectedPlayers.push('{{ form.team1_player2_id.default }}')
             {% endif %}
 

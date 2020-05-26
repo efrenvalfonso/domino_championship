@@ -52,8 +52,8 @@ class Game(db.Model):
         return '<Game %r>' % '{}/{} vs. {}/{}'.format(
             self.team1_player1.name,
             self.team1_player2.name,
-            self.team1_player1.name,
-            self.team1_player2.name
+            self.team2_player1.name,
+            self.team2_player2.name
         )
 
 
