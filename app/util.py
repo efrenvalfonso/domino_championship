@@ -37,19 +37,19 @@ def leader_board(today=False):
              case([(Game.team1_score >= 150, Game.points)])),
             (or_(Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id),
              case([(Game.team2_score >= 150, Game.points)]))
-        ]), 0)) + Player.manual_wins).label('wins_score'),
+        ]), 0)) + (0 if today else Player.manual_wins)).label('wins_score'),
         (func.sum(func.coalesce(case([
             (or_(Game.team1_player1_id == Player.id, Game.team1_player2_id == Player.id),
              case([(Game.team1_score < 150, Game.points)])),
             (or_(Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id),
              case([(Game.team2_score < 150, Game.points)]))
-        ]), 0)) + Player.manual_loses).label('loses_score'),
+        ]), 0)) + (0 if today else Player.manual_loses)).label('loses_score'),
         (func.sum(func.coalesce(case([
             (or_(Game.team1_player1_id == Player.id, Game.team1_player2_id == Player.id),
              case([(Game.team1_score < 150, -1)], else_=1) * Game.points),
             (or_(Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id),
              case([(Game.team2_score < 150, -1)], else_=1) * Game.points)
-        ]), 0)) + Player.manual_wins - Player.manual_loses).label('balance'),
+        ]), 0)) + (0 if today else (Player.manual_wins - Player.manual_loses))).label('balance'),
     ). \
         select_from(Player). \
         join(Game,
