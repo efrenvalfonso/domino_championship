@@ -70,7 +70,7 @@
     {% endif %}
 </header>
 <main>
-    <div class="container {% if tv %}mx-0 px-4{% endif %}" style="max-width: 100%; margin-top: 137px">
+    <div class="container {% if not tv %}mt-4{% endif %} {% if tv %}mx-0 px-4{% endif %}" style="max-width: 100%;{% if tv %}margin-top: 137px;{% endif %}">
         {% if not tv %}
             {% with messages = get_flashed_messages(with_categories=True) %}
                 {% if messages %}
