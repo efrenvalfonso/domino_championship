@@ -214,10 +214,36 @@ def versus_team_leader_board(today=False):
     if today:
         today = datetime.now() - timedelta(hours=8)
         beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
-        query = query.filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id, Game.started_at.__gt__(beginning_of_today)))
+        query = query.filter(
+            and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id,
+                 Game.started_at.__gt__(beginning_of_today)))
     else:
-        query = query.filter(and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id))
+        query = query.filter(
+            and_(Game.finished_at.isnot(None), players1.id != other_players1.id, players2.id != other_players2.id))
 
     return query.group_by(players1.id, players2.id, other_players1.id, other_players2.id). \
         having(or_(db.text('wins_score > 0'), db.text('loses_score > 0'))). \
         order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC, wins_score DESC')))
+
+
+def total_games_leader_board(points=None):
+    return db.session.query(
+        Player.id,
+        Player.name,
+        func.sum(func.coalesce(case([
+            (or_(Game.team1_player1_id == Player.id, Game.team1_player2_id == Player.id),
+             case([(Game.team1_score >= 150, 1)])),
+            (or_(Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id),
+             case([(Game.team2_score >= 150, 1)]))
+        ]), 0)).label('count'),
+    ). \
+        select_from(Game). \
+        join(Player,
+             or_(Game.team1_player1_id == Player.id,
+                 Game.team1_player2_id == Player.id,
+                 Game.team2_player1_id == Player.id,
+                 Game.team2_player2_id == Player.id),
+             isouter=True). \
+        filter(and_(Game.finished_at.isnot(None), (Game.points == points) if points else True)). \
+        group_by(Player.id). \
+        order_by(db.text('count DESC'))

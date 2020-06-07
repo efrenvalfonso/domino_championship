@@ -6,7 +6,7 @@ from sqlalchemy import and_
 
 from app.forms import GameDataForm
 from app.models import Game
-from app.util import leader_board, versus_leader_board, versus_team_leader_board
+from app.util import leader_board, versus_leader_board, versus_team_leader_board, total_games_leader_board
 
 bp = Blueprint('dashboard', __name__)
 
@@ -22,11 +22,15 @@ def index(tv=False):
 
     if not current_game:
         return render_template('dashboard/index.html',
-                               today_games=today_games,
+                               today_games=today_games.limit(10) if tv else today_games,
                                leader_board=leader_board(),
                                tv=tv,
                                leader_board_today=leader_board(True) if tv else None,
-                               versus_team_leader_board=versus_team_leader_board(True) if tv else None)
+                               versus_team_leader_board=versus_team_leader_board(True) if tv else None,
+                               total_games_leader_board=total_games_leader_board() if tv else None,
+                               total_single_games_leader_board=total_games_leader_board(points=1) if tv else None,
+                               total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
+                               total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None)
 
     current_game_status = 1
 
@@ -69,11 +73,15 @@ def index(tv=False):
                            current_game_status=current_game_status,
                            team1_game_data_form=team1_game_data_form,
                            team2_game_data_form=team2_game_data_form,
-                           today_games=today_games,
+                           today_games=today_games.limit(10) if tv else today_games,
                            leader_board=leader_board(),
                            tv=tv,
                            leader_board_today=leader_board(True) if tv else None,
-                           versus_team_leader_board=versus_team_leader_board(True) if tv else None)
+                           versus_team_leader_board=versus_team_leader_board(True) if tv else None,
+                           total_games_leader_board=total_games_leader_board() if tv else None,
+                           total_single_games_leader_board=total_games_leader_board(points=1) if tv else None,
+                           total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
+                           total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None)
 
 
 @bp.route('/tv')

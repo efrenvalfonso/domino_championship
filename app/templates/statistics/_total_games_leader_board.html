@@ -1,0 +1,25 @@
+<table class="table table-hover m-0">
+    <thead>
+    <tr class="table-info row m-0">
+        <th scope="col" class="text-center col-2 pr-2 border-top-0">#</th>
+        <th scope="col" class="col-6 p-2 border-top-0">Jugador</th>
+        <th scope="col" class="text-right col-4 pl-2 border-top-0">Cantidad</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for record in data %}
+        <tr class="row m-0 table-default">
+            <th scope="row" class="text-center col-2 pr-2">
+                {% if loop.index < 4 %}
+                    <img src="{{ url_for('static', filename='img/medal-' + (loop.index | string) + '.svg') }}"
+                         alt="{{ loop.index }}" style="height: 1.37em"/>
+                {% else %}
+                    {{ loop.index }}
+                {% endif %}
+            </th>
+            <td class="col-6 px-2">{{ record[1] }}</td>
+            <th scope="row" class="text-right col-4 pl-2">{{ record[2] }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
