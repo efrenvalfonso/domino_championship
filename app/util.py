@@ -28,7 +28,7 @@ class BooleanConverter(BaseConverter):
         return '1' if value else '0'
 
 
-def leader_board(today=False):
+def leader_board(today=False, active=True, min_games_count=0):
     query = db.session.query(
         Player.id,
         Player.name,
@@ -50,6 +50,10 @@ def leader_board(today=False):
             (or_(Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id),
              case([(Game.team2_score < 150, -1)], else_=1) * Game.points)
         ]), 0)) + (0 if today else (Player.manual_wins - Player.manual_loses))).label('balance'),
+        func.sum(func.coalesce(case([
+            (or_(Game.team1_player1_id == Player.id, Game.team1_player2_id == Player.id,
+                 Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id), 1)], else_=0),
+            0)).label('games_count')
     ). \
         select_from(Player). \
         join(Game,
@@ -64,7 +68,8 @@ def leader_board(today=False):
         beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
         query = query.filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today)))
     else:
-        query = query.filter(Game.finished_at.isnot(None))
+        query = query.filter(Game.finished_at.isnot(None)). \
+            having(db.text(f'games_count {">=" if active else "<"} {str(min_games_count)}'))
 
     return query. \
         group_by(Player.id). \

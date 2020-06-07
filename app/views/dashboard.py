@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timedelta
 
 from dateutil.tz import tz
@@ -19,12 +20,21 @@ def index(tv=False):
     today_games = Game.query. \
         filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today))). \
         order_by(Game.started_at.desc())
+    min_games_count = 0
+    first_game = Game.query.order_by(Game.started_at).first()
+
+    if first_game:
+        min_games_count = 7 * ((datetime.now() - first_game.started_at).days / 7)
+        min_games_count = int(math.ceil(min_games_count))
+
 
     if not current_game:
         return render_template('dashboard/index.html',
                                today_games=today_games.limit(10) if tv else today_games,
-                               leader_board=leader_board(),
+                               leader_board=leader_board(min_games_count=min_games_count),
+                               inactive_leader_board=leader_board(active=False, min_games_count=min_games_count),
                                tv=tv,
+                               min_games_count=min_games_count,
                                leader_board_today=leader_board(True) if tv else None,
                                versus_team_leader_board=versus_team_leader_board(True) if tv else None,
                                total_games_leader_board=total_games_leader_board() if tv else None,
@@ -81,7 +91,9 @@ def index(tv=False):
                            team1_game_data_form=team1_game_data_form,
                            team2_game_data_form=team2_game_data_form,
                            today_games=today_games.limit(10) if tv else today_games,
-                           leader_board=leader_board(),
+                           min_games_count=min_games_count,
+                           leader_board=leader_board(min_games_count=min_games_count),
+                           inactive_leader_board=leader_board(active=False, min_games_count=min_games_count),
                            tv=tv,
                            leader_board_today=leader_board(True) if tv else None,
                            versus_team_leader_board=versus_team_leader_board(True) if tv else None,

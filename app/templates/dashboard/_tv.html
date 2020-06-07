@@ -1,8 +1,8 @@
 <div class="row mb-4">
     <div class="col-3">
         <div class="card">
-            <h5 class="card-header text-center">Ranking global</h5>
-            {% with data = leader_board %}
+            <h5 class="card-header text-center">Ranking global{% if min_games_count and min_games_count > 0 %} (+{{ min_games_count }} juegos){% endif %}</h5>
+            {% with data = leader_board, extra = inactive_leader_board %}
                 {% include 'statistics/_leader_board.html' %}
             {% endwith %}
         </div>
