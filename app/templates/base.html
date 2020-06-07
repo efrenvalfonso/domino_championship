@@ -15,7 +15,8 @@
         <div class="w-100 text-muted font-weight-lighter">Modo TV</div>
         <div class="w-100 text-center position-absolute" style="left: 0; right: 0; top: 25%; z-index: -1">
             <h4 class="text-white mb-0">
-                <span id="clock-hour"></span><span id="clock-colon">:</span><span id="clock-minutes"></span><span id="clock-m"></span>
+                <span id="clock-hour"></span><span id="clock-colon">:</span><span id="clock-minutes"></span><span
+                    id="clock-m"></span>
             </h4>
         </div>
     {% else %}
@@ -62,9 +63,14 @@
         </div>
     {% endif %}
     <div class="text-white w-100 text-center text-md-right font-italic">"Conmigo no... con la tabla..."</div>
+    {% if tv %}
+        <div class="position-absolute  border-top" style="top: 100%; left: 0; right: 0;">
+            {% block current_game %}{% endblock %}
+        </div>
+    {% endif %}
 </header>
 <main>
-    <div class="container mt-4 {% if tv %}mx-0 px-4{% endif %}" style="max-width: 100%">
+    <div class="container {% if tv %}mx-0 px-4{% endif %}" style="max-width: 100%; margin-top: 137px">
         {% if not tv %}
             {% with messages = get_flashed_messages(with_categories=True) %}
                 {% if messages %}

@@ -1,5 +1,50 @@
 {% extends "base.html" %}
 
+{% block current_game %}
+    {% if current_game %}
+        <table class="table table-borderless table-dark m-0">
+            <tbody>
+            <tr class="row">
+                <td class="col-5 text-right">
+                    <h1 class="font-weight-lighter">
+                        {% if current_game_status > 1 %}
+                            {% if current_game_status == 2 and current_game.team1_score == 0 %}
+                                <img src="{{ url_for('static', filename='img/warning-2.svg') }}" width="35"
+                                     class="flash ml-2 mb-1" alt=""/>
+                            {% elif current_game_status == 3 and current_game.game_datas[0].is_for_team1 %}
+                                <img src="{{ url_for('static', filename='img/warning-3.svg') }}" width="35"
+                                     class="flash ml-2 mb-1" alt=""/>
+                            {% endif %}
+                        {% endif %}
+                        {{ current_game.team1_player1.name }} - {{ current_game.team1_player2.name }}
+                    </h1>
+                </td>
+                <td class="col-1 text-right pr-4"><h1
+                        class="font-weight-bolder">{{ current_game.team1_score }}</h1>
+                </td>
+                <td class="col-1 text-left pl-4"><h1
+                        class="font-weight-bolder">{{ current_game.team2_score }}</h1>
+                </td>
+                <td class="col-5 text-left">
+                    <h1 class="font-weight-lighter">
+                        {{ current_game.team2_player1.name }} - {{ current_game.team2_player2.name }}
+                        {% if current_game_status > 1 %}
+                            {% if current_game_status == 2 and current_game.team2_score == 0 %}
+                                <img src="{{ url_for('static', filename='img/warning-2.svg') }}" width="35"
+                                     class="flash ml-2 mb-1" alt=""/>
+                            {% elif current_game_status == 3 and not current_game.game_datas[0].is_for_team1 %}
+                                <img src="{{ url_for('static', filename='img/warning-3.svg') }}" width="35"
+                                     class="flash ml-2 mb-1" alt=""/>
+                            {% endif %}
+                        {% endif %}
+                    </h1>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     {% if tv %}
         {% include 'dashboard/_tv.html' %}
@@ -248,7 +293,7 @@
                 }, 1000);
             }
 
-            countdown(10)
+            countdown(600)
 
             $(document).ready(() => {
                 const flash = (fadeIn = false) => {
