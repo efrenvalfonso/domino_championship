@@ -30,7 +30,14 @@ def index(tv=False):
                                total_games_leader_board=total_games_leader_board() if tv else None,
                                total_single_games_leader_board=total_games_leader_board(points=1) if tv else None,
                                total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
-                               total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None)
+                               total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None,
+                               total_lost_games_leader_board=total_games_leader_board(won=False) if tv else None,
+                               total_lost_single_games_leader_board=total_games_leader_board(won=False,
+                                                                                             points=1) if tv else None,
+                               total_lost_double_games_leader_board=total_games_leader_board(won=False,
+                                                                                             points=2) if tv else None,
+                               total_lost_triple_games_leader_board=total_games_leader_board(won=False,
+                                                                                             points=3) if tv else None)
 
     current_game_status = 1
 
@@ -83,9 +90,12 @@ def index(tv=False):
                            total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
                            total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None,
                            total_lost_games_leader_board=total_games_leader_board(won=False) if tv else None,
-                           total_lost_single_games_leader_board=total_games_leader_board(won=False, points=1) if tv else None,
-                           total_lost_double_games_leader_board=total_games_leader_board(won=False, points=2) if tv else None,
-                           total_lost_triple_games_leader_board=total_games_leader_board(won=False, points=3) if tv else None)
+                           total_lost_single_games_leader_board=total_games_leader_board(won=False,
+                                                                                         points=1) if tv else None,
+                           total_lost_double_games_leader_board=total_games_leader_board(won=False,
+                                                                                         points=2) if tv else None,
+                           total_lost_triple_games_leader_board=total_games_leader_board(won=False,
+                                                                                         points=3) if tv else None)
 
 
 @bp.route('/tv')
