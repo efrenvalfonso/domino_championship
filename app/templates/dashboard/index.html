@@ -47,14 +47,16 @@
 
 {% block content %}
     {% if tv %}
+        <div class="text-center text-muted mb-1 {% if not current_game %} mt-n4{% endif %}">
+            <small class="font-weight-lighter">
+                Actualizando en <span id="countdown"></span>
+            </small>
+        </div>
         {% include 'dashboard/_tv.html' %}
     {% else %}
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="card mb-4">
-                    {% if not current_game %}
-                        <h5 class="card-header text-center">No se esta jugando</h5>
-                    {% endif %}
                     {% if current_game %}
                         {% include 'dashboard/_current_game_board.html' %}
                     {% else %}
@@ -276,24 +278,12 @@
 
                 document.getElementById('countdown').innerHTML = remaining;
 
-                switch (remaining % 3) {
-                    case 1:
-                        document.getElementById('dots').innerHTML = '...';
-                        break
-                    case 2:
-                        document.getElementById('dots').innerHTML = '..';
-                        break
-                    default:
-                        document.getElementById('dots').innerHTML = '.';
-                        break
-                }
-
                 setTimeout(() => {
                     countdown(remaining - 1);
                 }, 1000);
             }
 
-            countdown(600)
+            countdown(5)
 
             $(document).ready(() => {
                 const flash = (fadeIn = false) => {
