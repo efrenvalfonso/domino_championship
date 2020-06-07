@@ -42,12 +42,6 @@
                 </tr>
                 </tbody>
             </table>
-        {% else %}
-            <div class="card">
-                <div class="card-body text-center">
-                    <h2>No hay juego un juego abierto</h2>
-                </div>
-            </div>
         {% endif %}
     </div>
 </div>
@@ -68,16 +62,20 @@
                     {% include 'statistics/_leader_board.html' %}
                 {% endwith %}
             {% else %}
-                <div class="card-body text-center">No se ha jugado</div>
+                <div class="card-body text-center">No hay datos</div>
             {% endif %}
         </div>
     </div>
     <div class="col-4">
         <div class="card">
             <h5 class="card-header text-center">Por parejas hoy</h5>
-            {% with data = versus_team_leader_board %}
-                {% include 'statistics/_versus_team_leader_board.html' %}
-            {% endwith %}
+            {% if versus_team_leader_board.count() > 0 %}
+                {% with data = versus_team_leader_board %}
+                    {% include 'statistics/_versus_team_leader_board.html' %}
+                {% endwith %}
+            {% else %}
+                <div class="card-body text-center">No hay datos</div>
+            {% endif %}
         </div>
     </div>
     <div class="col-2">
@@ -94,7 +92,7 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <div class="card-body text-center">No se ha jugado</div>
+                <div class="card-body text-center">No hay datos</div>
             {% endif %}
         </div>
     </div>
