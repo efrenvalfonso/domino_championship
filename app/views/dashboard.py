@@ -6,7 +6,7 @@ from sqlalchemy import and_
 
 from app.forms import GameDataForm
 from app.models import Game
-from app.util import leader_board, versus_leader_board, versus_team_leader_board, total_games_leader_board
+from app.util import leader_board, versus_team_leader_board, total_games_leader_board
 
 bp = Blueprint('dashboard', __name__)
 
@@ -81,7 +81,11 @@ def index(tv=False):
                            total_games_leader_board=total_games_leader_board() if tv else None,
                            total_single_games_leader_board=total_games_leader_board(points=1) if tv else None,
                            total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
-                           total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None)
+                           total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None,
+                           total_lost_games_leader_board=total_games_leader_board(won=False) if tv else None,
+                           total_lost_single_games_leader_board=total_games_leader_board(won=False, points=1) if tv else None,
+                           total_lost_double_games_leader_board=total_games_leader_board(won=False, points=2) if tv else None,
+                           total_lost_triple_games_leader_board=total_games_leader_board(won=False, points=3) if tv else None)
 
 
 @bp.route('/tv')

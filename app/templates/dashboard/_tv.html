@@ -97,10 +97,10 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row mb-4">
     <div class="col-3">
         <div class="card">
-            <h5 class="card-header text-center">Total de Partidos</h5>
+            <h5 class="card-header text-center">Total de Juegos Ganados</h5>
             {% if total_games_leader_board.count() > 0 %}
                 {% with data = total_games_leader_board %}
                     {% include 'statistics/_total_games_leader_board.html' %}
@@ -112,7 +112,7 @@
     </div>
     <div class="col-3">
         <div class="card">
-            <h5 class="card-header text-center">Total de Partidos Sencillos</h5>
+            <h5 class="card-header text-center">Total de Partidos Ganados</h5>
             {% if total_single_games_leader_board.count() > 0 %}
                 {% with data = total_single_games_leader_board %}
                     {% include 'statistics/_total_games_leader_board.html' %}
@@ -124,7 +124,7 @@
     </div>
     <div class="col-3">
         <div class="card">
-            <h5 class="card-header text-center">Total de Pollonas</h5>
+            <h5 class="card-header text-center">Total de Pollonas Ganadas</h5>
             {% if total_double_games_leader_board.count() > 0 %}
                 {% with data = total_double_games_leader_board %}
                     {% include 'statistics/_total_games_leader_board.html' %}
@@ -136,9 +136,59 @@
     </div>
     <div class="col-3">
         <div class="card">
-            <h5 class="card-header text-center">Total de Reculas</h5>
+            <h5 class="card-header text-center">Total de Reculas Ganadas</h5>
             {% if total_triple_games_leader_board.count() > 0 %}
                 {% with data = total_triple_games_leader_board %}
+                    {% include 'statistics/_total_games_leader_board.html' %}
+                {% endwith %}
+            {% else %}
+                <div class="card-body text-center">No hay datos</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <div class="card">
+            <h5 class="card-header text-center">Total de Juegos Perdidos</h5>
+            {% if total_lost_games_leader_board.count() > 0 %}
+                {% with data = total_lost_games_leader_board %}
+                    {% include 'statistics/_total_games_leader_board.html' %}
+                {% endwith %}
+            {% else %}
+                <div class="card-body text-center">No hay datos</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
+            <h5 class="card-header text-center">Total de Partidos Perdidos</h5>
+            {% if total_lost_single_games_leader_board.count() > 0 %}
+                {% with data = total_lost_single_games_leader_board %}
+                    {% include 'statistics/_total_games_leader_board.html' %}
+                {% endwith %}
+            {% else %}
+                <div class="card-body text-center">No hay datos</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card info">
+            <h5 class="card-header text-center">Total de Pollonas Recibidas</h5>
+            {% if total_lost_double_games_leader_board.count() > 0 %}
+                {% with data = total_lost_double_games_leader_board %}
+                    {% include 'statistics/_total_games_leader_board.html' %}
+                {% endwith %}
+            {% else %}
+                <div class="card-body text-center">No hay datos</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
+            <h5 class="card-header text-center">Total de Reculas Recibidas</h5>
+            {% if total_lost_triple_games_leader_board.count() > 0 %}
+                {% with data = total_lost_triple_games_leader_board %}
                     {% include 'statistics/_total_games_leader_board.html' %}
                 {% endwith %}
             {% else %}

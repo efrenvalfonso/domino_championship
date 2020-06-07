@@ -226,15 +226,15 @@ def versus_team_leader_board(today=False):
         order_by(db.text(request.args.get('versus_team_leader_board_order_by', 'balance DESC, wins_score DESC')))
 
 
-def total_games_leader_board(points=None):
+def total_games_leader_board(won=True, points=None):
     return db.session.query(
         Player.id,
         Player.name,
         func.sum(func.coalesce(case([
             (or_(Game.team1_player1_id == Player.id, Game.team1_player2_id == Player.id),
-             case([(Game.team1_score >= 150, 1)])),
+             case([((Game.team1_score >= 150) if won else (Game.team1_score < 150), 1)])),
             (or_(Game.team2_player1_id == Player.id, Game.team2_player2_id == Player.id),
-             case([(Game.team2_score >= 150, 1)]))
+             case([((Game.team2_score >= 150) if won else (Game.team2_score < 150), 1)]))
         ]), 0)).label('count'),
     ). \
         select_from(Game). \
@@ -246,4 +246,5 @@ def total_games_leader_board(points=None):
              isouter=True). \
         filter(and_(Game.finished_at.isnot(None), (Game.points == points) if points else True)). \
         group_by(Player.id). \
+        having(db.text('count > 0')). \
         order_by(db.text('count DESC'))
