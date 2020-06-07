@@ -162,7 +162,7 @@
     </div>
     <div class="col-3">
         <div class="card">
-            <h5 class="card-header text-center">Total de Partidos Perdidos</h5>
+            <h5 class="card-header text-center">Total de Partidos Recibidos</h5>
             {% if total_lost_single_games_leader_board.count() > 0 %}
                 {% with data = total_lost_single_games_leader_board %}
                     {% include 'statistics/_total_games_leader_board.html' %}
