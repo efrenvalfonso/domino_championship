@@ -23,9 +23,7 @@
     </tr>
     </thead>
     <tbody>
-    {% set ns = namespace(last_index = 0) %}
     {% for record in data %}
-        {% set ns.last_index = loop.index %}
         <tr class="row m-0 table-{% if record[4] < 0 %}danger{% elif record[4] == 0 %}warning{% else %}default{% endif %}">
             <th scope="row" class="text-center col-2 pr-2">
                 {% if loop.index < 4 %}
@@ -44,15 +42,7 @@
     {% if extra %}
         {% for record in extra %}
             <tr class="row m-0 table-secondary">
-                <th scope="row" class="text-center col-2 pr-2">
-                    {% set real_index = ns.last_index + loop.index %}
-                    {% if real_index < 4 %}
-                        <img src="{{ url_for('static', filename='img/medal-' + (real_index | string) + '.svg') }}"
-                             alt="{{ real_index }}" style="height: 1.37em"/>
-                    {% else %}
-                        {{ real_index }}
-                    {% endif %}
-                </th>
+                <th scope="row" class="text-center col-2 pr-2">-</th>
                 <td class="col-4 px-2">{{ record[1] }}</td>
                 <td class="text-right col-2 px-2">{{ record[2] }}</td>
                 <td class="text-right col-2 px-2">{{ record[3] }}</td>
