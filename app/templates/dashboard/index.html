@@ -273,14 +273,15 @@
     <script type="text/javascript">
         {% if tv %}
             const countdown = (remaining) => {
-                if (remaining <= 0)
-                    location.reload(true);
+		if (remaining <= 0) {
+                    location.reload();
+                } else {
+                    document.getElementById('countdown').innerHTML = remaining;
 
-                document.getElementById('countdown').innerHTML = remaining;
-
-                setTimeout(() => {
-                    countdown(remaining - 1);
-                }, 1000);
+                    setTimeout(() => {
+                        countdown(remaining - 1);
+                    }, 1000);
+		}
             }
 
             countdown(5)
