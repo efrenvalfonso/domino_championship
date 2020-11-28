@@ -22,12 +22,13 @@ def index(tv=False):
         order_by(Game.started_at.desc())
     min_games_count = 0
     first_game = Game.query.order_by(Game.started_at).first()
+    days_off = 24
 
     if first_game:
         starting_day = first_game.started_at
         starting_day = datetime(starting_day.year, starting_day.month, starting_day.day, 0, 0)
         min_games_count = 7 * ((datetime.now() - starting_day).days / 7)
-        min_games_count = int(math.ceil(min_games_count))
+        min_games_count = int(math.ceil(min_games_count)) - days_off
 
     if not current_game:
         return render_template('dashboard/index.html',
