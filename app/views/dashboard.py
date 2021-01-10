@@ -13,7 +13,7 @@ bp = Blueprint('dashboard', __name__)
 
 
 @bp.route('/')
-def index(tv=False):
+def index(tv=False, global_stats=False):
     current_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
     today = datetime.now() - timedelta(hours=8)
     beginning_of_today = datetime(today.year, today.month, today.day, 8, 0).astimezone(tz.gettz('UTC'))
@@ -21,8 +21,12 @@ def index(tv=False):
         filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today))). \
         order_by(Game.started_at.desc())
     min_games_count = 0
-    first_game = Game.query.order_by(Game.started_at).first()
     days_off = 24
+    if global_stats:
+        first_game = Game.query.order_by(Game.started_at).first()
+    else:
+        beginning_of_year = datetime(today.year, 1, 1, 8, 0).astimezone(tz.gettz('UTC'))
+        first_game = Game.query.filter(Game.started_at.__gt__(beginning_of_year)).order_by(Game.started_at).first()
 
     if first_game:
         starting_day = first_game.started_at
@@ -33,23 +37,35 @@ def index(tv=False):
     if not current_game:
         return render_template('dashboard/index.html',
                                today_games=today_games.limit(10) if tv else today_games,
-                               leader_board=leader_board(min_games_count=min_games_count),
-                               inactive_leader_board=leader_board(active=False, min_games_count=min_games_count),
+                               leader_board=leader_board(min_games_count=min_games_count,
+                                                         global_stats=global_stats),
+                               inactive_leader_board=leader_board(active=False,
+                                                                  min_games_count=min_games_count,
+                                                                  global_stats=global_stats),
                                tv=tv,
                                min_games_count=min_games_count,
-                               leader_board_today=leader_board(True) if tv else None,
-                               versus_team_leader_board=versus_team_leader_board(True) if tv else None,
-                               total_games_leader_board=total_games_leader_board() if tv else None,
-                               total_single_games_leader_board=total_games_leader_board(points=1) if tv else None,
-                               total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
-                               total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None,
-                               total_lost_games_leader_board=total_games_leader_board(won=False) if tv else None,
+                               leader_board_today=leader_board(True,
+                                                               global_stats=global_stats) if tv else None,
+                               versus_team_leader_board=versus_team_leader_board(True,
+                                                                                 global_stats=global_stats) if tv else None,
+                               total_games_leader_board=total_games_leader_board(global_stats=global_stats) if tv else None,
+                               total_single_games_leader_board=total_games_leader_board(points=1,
+                                                                                        global_stats=global_stats) if tv else None,
+                               total_double_games_leader_board=total_games_leader_board(points=2,
+                                                                                        global_stats=global_stats) if tv else None,
+                               total_triple_games_leader_board=total_games_leader_board(points=3,
+                                                                                        global_stats=global_stats) if tv else None,
+                               total_lost_games_leader_board=total_games_leader_board(won=False,
+                                                                                      global_stats=global_stats) if tv else None,
                                total_lost_single_games_leader_board=total_games_leader_board(won=False,
-                                                                                             points=1) if tv else None,
+                                                                                             points=1,
+                                                                                             global_stats=global_stats) if tv else None,
                                total_lost_double_games_leader_board=total_games_leader_board(won=False,
-                                                                                             points=2) if tv else None,
+                                                                                             points=2,
+                                                                                             global_stats=global_stats) if tv else None,
                                total_lost_triple_games_leader_board=total_games_leader_board(won=False,
-                                                                                             points=3) if tv else None)
+                                                                                             points=3,
+                                                                                             global_stats=global_stats) if tv else None)
 
     current_game_status = 1
 
@@ -94,22 +110,34 @@ def index(tv=False):
                            team2_game_data_form=team2_game_data_form,
                            today_games=today_games.limit(10) if tv else today_games,
                            min_games_count=min_games_count,
-                           leader_board=leader_board(min_games_count=min_games_count),
-                           inactive_leader_board=leader_board(active=False, min_games_count=min_games_count),
+                           leader_board=leader_board(min_games_count=min_games_count,
+                                                     global_stats=global_stats),
+                           inactive_leader_board=leader_board(active=False,
+                                                              min_games_count=min_games_count,
+                                                              global_stats=global_stats),
                            tv=tv,
-                           leader_board_today=leader_board(True) if tv else None,
-                           versus_team_leader_board=versus_team_leader_board(True) if tv else None,
-                           total_games_leader_board=total_games_leader_board() if tv else None,
-                           total_single_games_leader_board=total_games_leader_board(points=1) if tv else None,
-                           total_double_games_leader_board=total_games_leader_board(points=2) if tv else None,
-                           total_triple_games_leader_board=total_games_leader_board(points=3) if tv else None,
-                           total_lost_games_leader_board=total_games_leader_board(won=False) if tv else None,
+                           leader_board_today=leader_board(True,
+                                                           global_stats=global_stats) if tv else None,
+                           versus_team_leader_board=versus_team_leader_board(True,
+                                                                             global_stats=global_stats) if tv else None,
+                           total_games_leader_board=total_games_leader_board(global_stats=global_stats) if tv else None,
+                           total_single_games_leader_board=total_games_leader_board(points=1,
+                                                                                    global_stats=global_stats) if tv else None,
+                           total_double_games_leader_board=total_games_leader_board(points=2,
+                                                                                    global_stats=global_stats) if tv else None,
+                           total_triple_games_leader_board=total_games_leader_board(points=3,
+                                                                                    global_stats=global_stats) if tv else None,
+                           total_lost_games_leader_board=total_games_leader_board(won=False,
+                                                                                  global_stats=global_stats) if tv else None,
                            total_lost_single_games_leader_board=total_games_leader_board(won=False,
-                                                                                         points=1) if tv else None,
+                                                                                         points=1,
+                                                                                         global_stats=global_stats) if tv else None,
                            total_lost_double_games_leader_board=total_games_leader_board(won=False,
-                                                                                         points=2) if tv else None,
+                                                                                         points=2,
+                                                                                         global_stats=global_stats) if tv else None,
                            total_lost_triple_games_leader_board=total_games_leader_board(won=False,
-                                                                                         points=3) if tv else None)
+                                                                                         points=3,
+                                                                                         global_stats=global_stats) if tv else None)
 
 
 @bp.route('/tv')
