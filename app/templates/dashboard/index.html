@@ -98,6 +98,8 @@
                         {% with data = leader_board %}
                             {% include 'statistics/_leader_board.html' %}
                         {% endwith %}
+                    {% else %}
+                        <div class="card-body text-center">No hay datos</div>
                     {% endif %}
                 </div>
             </div>
