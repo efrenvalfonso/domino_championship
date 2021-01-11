@@ -25,7 +25,7 @@
 
             team1player1Select.select2({
                 ajax: {
-                    url: '/players/game-player-for{% if form.team1_player2_id.default %}/{{ form.team1_player2_id.default }}{% endif %}',
+                    url: '/players/game-player-for/{% if form.team1_player2_id.default %}{{ form.team1_player2_id.default }}{% endif %}',
                     dataType: 'json',
                 }
             })
@@ -58,7 +58,7 @@
 
             team1player2Select.select2({
                 ajax: {
-                    url: '/players/game-player-for{% if form.team1_player1_id.default %}/{{ form.team1_player1_id.default }}{% endif %}',
+                    url: '/players/game-player-for/{% if form.team1_player1_id.default %}{{ form.team1_player1_id.default }}{% endif %}',
                     dataType: 'json',
                 }
             })
@@ -91,7 +91,7 @@
 
             team2player1Select.select2({
                 ajax: {
-                    url: '/players/game-player-for' + (preSelectedPlayers.length > 0 ? ('/' + preSelectedPlayers.join('+')) : ''),
+                    url: '/players/game-player-for/' + (preSelectedPlayers.length > 0 ? preSelectedPlayers.join('+') : ''),
                     dataType: 'json',
                 }
             }).on('select2:select', (e) => {
@@ -117,7 +117,7 @@
 
             team2player2Select.select2({
                 ajax: {
-                    url: '/players/game-player-for' + (preSelectedPlayers.length > 0 ? ('/' + preSelectedPlayers.join('+')) : ''),
+                    url: '/players/game-player-for/' + (preSelectedPlayers.length > 0 ? preSelectedPlayers.join('+') : ''),
                     dataType: 'json',
                 }
             }).on('select2:select', (e) => {
