@@ -142,4 +142,14 @@ def index(tv=False, global_stats=False):
 
 @bp.route('/tv')
 def tv():
-    return index(True)
+    return index(tv=True)
+
+
+@bp.route('/global-stats')
+def tv():
+    return index(global_stats=True)
+
+
+@bp.route('/tv/global-stats')
+def tv():
+    return index(tv=True, global_stats=True)
