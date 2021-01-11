@@ -146,10 +146,10 @@ def tv():
 
 
 @bp.route('/global')
-def tv():
+def global_stats():
     return index(global_stats=True)
 
 
 @bp.route('/tv/global')
-def tv():
+def tv_global_stats():
     return index(tv=True, global_stats=True)
