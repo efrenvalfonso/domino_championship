@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_required
 
 from app import db
 from app.forms import GameForm
@@ -10,6 +11,7 @@ bp = Blueprint('games', __name__, url_prefix='/games')
 
 
 @bp.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     open_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
 
@@ -64,6 +66,7 @@ def new():
 
 
 @bp.route('/end/<int:game_id>/team1_won/<bool:team1_won>', methods=['POST'])
+@login_required
 def end(game_id, team1_won):
     game = Game.query.filter(Game.id == game_id).one_or_none()
 
@@ -118,6 +121,7 @@ def end(game_id, team1_won):
 
 
 @bp.route('/reopen-last-game', methods=['POST'])
+@login_required
 def reopen_last_game():
     if Game.query.filter(Game.finished_at.is_(None)).one_or_none():
         flash('Hay un juego abierto, terminelo antes de comenzar otro', 'error')
@@ -143,6 +147,7 @@ def reopen_last_game():
 
 
 @bp.route('delete/<int:game_id>', methods=['POST'])
+@login_required
 def delete(game_id):
     game = Game.query.filter(Game.id == game_id).one_or_none()
 

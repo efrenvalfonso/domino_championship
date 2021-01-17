@@ -1,8 +1,19 @@
 from datetime import datetime
-
+from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
 
 from app import db
+
+
+class User(UserMixin):
+    def __init__(self, username):
+        self.username = username
+
+    def get_id(self):
+        return self.username
+
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 
 class Player(db.Model, SerializerMixin):

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from dateutil.tz import tz
 from flask import Blueprint, render_template
+from flask_login import login_required
 from sqlalchemy import and_
 
 from app.forms import GameDataForm
@@ -13,6 +14,7 @@ bp = Blueprint('dashboard', __name__)
 
 
 @bp.route('/')
+@login_required
 def index(tv=False, global_stats=False):
     current_game = Game.query.filter(Game.finished_at.is_(None)).one_or_none()
     today = datetime.now() - timedelta(hours=8)
@@ -141,15 +143,18 @@ def index(tv=False, global_stats=False):
 
 
 @bp.route('/tv')
+@login_required
 def tv():
     return index(tv=True)
 
 
 @bp.route('/global')
+@login_required
 def global_stats():
     return index(global_stats=True)
 
 
 @bp.route('/tv/global')
+@login_required
 def tv_global_stats():
     return index(tv=True, global_stats=True)

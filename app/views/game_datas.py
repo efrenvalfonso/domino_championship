@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, redirect, url_for, flash
+from flask_login import login_required
 
 from app import db
 from app.forms import GameDataForm
@@ -10,6 +11,7 @@ bp = Blueprint('game_datas', __name__, url_prefix='/game-datas')
 
 
 @bp.route('/new', methods=['POST'])
+@login_required
 def new():
     form = GameDataForm()
 
@@ -67,6 +69,7 @@ def new():
 
 
 @bp.route('delete/<int:game_data_id>', methods=['POST'])
+@login_required
 def delete(game_data_id):
     game_data = GameData.query.filter(GameData.id == game_data_id).one_or_none()
 

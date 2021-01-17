@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify
+from flask_login import login_required
 from sqlalchemy.orm import load_only
 
 from app import db
@@ -9,6 +10,7 @@ bp = Blueprint('players', __name__, url_prefix='/players')
 
 
 @bp.route('/')
+@login_required
 def index():
     players = Player.query.order_by(Player.name)
 
@@ -16,6 +18,7 @@ def index():
 
 
 @bp.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     form = PlayerForm()
 
@@ -31,6 +34,7 @@ def new():
 
 
 @bp.route('/annotate', methods=['GET', 'POST'])
+@login_required
 def annotate():
     form = PlayerAnnotateForm()
     form.id.choices = [(0, '')] + [(p.id, p.name) for p in Player.query.order_by(Player.name).all()]
@@ -50,6 +54,7 @@ def annotate():
 
 @bp.route('/game-player-for/', defaults={'current_players': []})
 @bp.route('/game-player-for/<list:current_players>')
+@login_required
 def game_player_for(current_players):
     players = Player.query. \
         filter(~Player.id.in_(current_players or [])). \

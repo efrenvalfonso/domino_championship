@@ -1,11 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField
 from wtforms.validators import DataRequired, Length, NumberRange, InputRequired
 from wtforms.widgets import HiddenInput
 
 
 class HiddenInteger(IntegerField):
     widget = HiddenInput()
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Usuario', validators=[InputRequired(message='El nombre es requerido'),
+                                             DataRequired(message='El nombre es requerido')])
+    password = PasswordField('Contraseña', validators=[InputRequired(message='La contraseña es requerida'),
+                                             DataRequired(message='La contraseña es requerida')])
+    remember = BooleanField('Recuérdame')
+    submit = SubmitField('Entrar')
 
 
 class PlayerForm(FlaskForm):
