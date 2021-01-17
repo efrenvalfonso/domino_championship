@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request, abort
 from flask_login import login_user
 from os import environ
+from urllib.parse import urlparse, urljoin
 
 from app.forms import LoginForm
 from app.models import User
@@ -28,5 +29,14 @@ def login():
 
         # if the above check passes, then we know the user has the right credentials
         login_user(User(username), remember=remember)
-        return redirect(url_for('dashboard.index'))
+        next_url = request.args.get('next')
+        if not is_safe_url(next_url):
+            return abort(400)
+        return redirect(next_url or url_for('dashboard.index'))
     return render_template('auth/new.html', title='Acceder', form=form)
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
