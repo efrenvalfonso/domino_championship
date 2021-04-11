@@ -35,7 +35,7 @@ def index(tv=False, global_stats=False):
     if first_game:
         starting_day = first_game.started_at
         starting_day = datetime(starting_day.year, starting_day.month, starting_day.day, 0, 0)
-        min_games_count = games_per_week * ((datetime.now() - starting_day).days / games_per_week)
+        min_games_count = games_per_week * ((datetime.now() - starting_day).days / 7)  # games_per_week * weeks
         min_games_count = int(math.ceil(min_games_count))
 
     if not current_game:
