@@ -12,4 +12,4 @@ class Config(object):
 
     if os.environ.get('FLASK_ENV') == 'development':
         SQLALCHEMY_ECHO = True
-    GAMES_PER_WEEK = os.environ.get('DEFAULT_GAMES_PER_WEEK') or 3
+    GAMES_PER_WEEK = os.environ.get('GAMES_PER_WEEK') or 1
