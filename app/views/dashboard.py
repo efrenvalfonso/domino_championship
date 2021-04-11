@@ -23,7 +23,7 @@ def index(tv=False, global_stats=False):
     today_games = Game.query. \
         filter(and_(Game.finished_at.isnot(None), Game.started_at.__gt__(beginning_of_today))). \
         order_by(Game.started_at.desc())
-    min_games_count = 0
+    starting_day = datetime(today.year, 1, 1)
     games_per_week = int(app.config['GAMES_PER_WEEK'])
 
     if global_stats:
@@ -32,11 +32,12 @@ def index(tv=False, global_stats=False):
         beginning_of_year = datetime(today.year, 1, 1, 8, 0).astimezone(tz.gettz('UTC'))
         first_game = Game.query.filter(Game.started_at.__gt__(beginning_of_year)).order_by(Game.started_at).first()
 
-    if first_game:
+    if today.year == 2020 and first_game:
         starting_day = first_game.started_at
-        starting_day = datetime(starting_day.year, starting_day.month, starting_day.day, 0, 0)
-        min_games_count = games_per_week * ((datetime.now() - starting_day).days / 7)  # games_per_week * weeks
-        min_games_count = int(math.ceil(min_games_count))
+
+    starting_day = datetime(starting_day.year, starting_day.month, starting_day.day, 0, 0)
+    min_games_count = games_per_week * ((datetime.now() - starting_day).days / 7)  # games_per_week * weeks
+    min_games_count = int(math.ceil(min_games_count))
 
     if not current_game:
         return render_template('dashboard/index.html',
